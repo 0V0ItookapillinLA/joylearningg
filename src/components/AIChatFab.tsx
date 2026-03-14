@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const mockMessages = [
-  { role: "ai" as const, text: "你好！我是AI助手，有什么业务问题可以帮你解答？" },
+type Message = { role: "ai" | "user"; text: string };
+
+const mockMessages: Message[] = [
+  { role: "ai", text: "你好！我是AI助手，有什么业务问题可以帮你解答？" },
 ];
 
 const AIChatFab = () => {
