@@ -126,7 +126,7 @@ const PracticeSessionPage = () => {
   // Video/Voice mode
   if (isVideoMode) {
     return (
-      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col">
+      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col relative">
         <div className="flex items-center justify-between px-4 py-3 z-10">
           <button onClick={() => navigate(-1)} className="text-white/80"><ArrowLeft className="h-5 w-5" /></button>
           <span className="text-sm font-medium text-white">{role.name}</span>
@@ -138,6 +138,20 @@ const PracticeSessionPage = () => {
         <div className="flex-1 relative flex items-center justify-center">
           <img src={role.avatar} alt={role.name} className="w-full h-full object-cover opacity-80" />
           
+          {/* Scene prompt for script mode */}
+          {scriptMode && (
+            <div className="absolute top-4 left-4 w-[55%] bg-black/60 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+              <p className="text-[10px] text-yellow-400 font-semibold mb-1">{actInfo[currentAct]?.title || "第一幕"}</p>
+              <ul className="space-y-1">
+                {(actInfo[currentAct]?.points || []).map((p, i) => (
+                  <li key={i} className="text-[10px] text-white/80 flex gap-1">
+                    <span className="text-yellow-400 shrink-0">•</span>{p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="absolute top-4 right-4 w-20 h-28 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
             <div className="w-full h-full bg-primary/20 flex items-center justify-center">
               <span className="text-[10px] text-primary font-medium">🎤 你</span>
