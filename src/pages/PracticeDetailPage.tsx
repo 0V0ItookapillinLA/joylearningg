@@ -1,7 +1,9 @@
-import { ArrowLeft, Play, MapPin, CheckSquare, Target, Clock, Users } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Play, MapPin, CheckSquare, Target, Clock, Users, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import coverObjection from "@/assets/cover-objection.jpg";
 import coverPhoneSales from "@/assets/cover-phone-sales.jpg";
 import coverProduct from "@/assets/cover-product.jpg";
@@ -77,21 +79,29 @@ const PracticeDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const practice = practiceData[id || "1"] || practiceData["1"];
+  const [showGuide, setShowGuide] = useState(false);
 
   const getModeRoute = () => {
+    const isScript = practice.tag === "固定剧本";
     if (practice.tag === "文本对练") return `/practice-session/${id}?mode=text`;
-    return `/practice-session/${id}?mode=video`;
+    return `/practice-session/${id}?mode=video${isScript ? "&script=true" : ""}`;
   };
+
+  const guideContent = `本练习模拟${practice.title}场景。\n\n🎯 练习目标：\n${practice.focuses.map(f => "• " + f.desc).join("\n")}\n\n⚠️ 注意事项：\n• 注意控制沟通节奏\n• 保持专业态度\n• 灵活应对各种情况`;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Fixed back button */}
+      <div className="fixed top-0 left-0 right-0 z-20 mx-auto max-w-[430px]">
+        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow">
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+      </div>
+
       {/* Cover with image */}
       <div className="relative h-52 shrink-0">
         <img src={practice.cover} alt={practice.title} className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm">
-          <ArrowLeft className="h-4 w-4" />
-        </button>
       </div>
 
       {/* Scrollable content */}
@@ -149,15 +159,42 @@ const PracticeDetailPage = () => {
         </div>
       </div>
 
-      {/* Sticky bottom buttons */}
-      <div className="sticky bottom-0 z-10 bg-card border-t border-border px-4 py-3 flex gap-3">
-        <Button variant="outline" className="flex-1 rounded-xl h-11 text-xs" onClick={() => navigate(-1)}>
+      {/* Fixed bottom buttons */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 mx-auto max-w-[430px] bg-card border-t border-border px-4 py-3 flex gap-3">
+        <Button variant="outline" className="flex-1 rounded-xl h-11 text-xs" onClick={() => setShowGuide(true)}>
           练前指导
         </Button>
         <Button className="flex-1 rounded-xl h-11 text-xs" onClick={() => navigate(getModeRoute())}>
           进入场景练习
         </Button>
       </div>
+
+      {/* Guide bottom sheet */}
+      <AnimatePresence>
+        {showGuide && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+              onClick={() => setShowGuide(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
+              style={{ maxHeight: "60vh" }}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h3 className="text-sm font-semibold">练前指导</h3>
+                <button onClick={() => setShowGuide(false)}><X className="h-5 w-5 text-muted-foreground" /></button>
+              </div>
+              <div className="overflow-y-auto p-4" style={{ maxHeight: "calc(60vh - 56px)" }}>
+                <p className="text-xs leading-relaxed text-foreground whitespace-pre-line">{guideContent}</p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

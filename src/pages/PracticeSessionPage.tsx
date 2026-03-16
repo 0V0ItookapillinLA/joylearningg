@@ -37,15 +37,23 @@ const PracticeSessionPage = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "text";
+  const scriptMode = searchParams.get("script") === "true";
   const [messages, setMessages] = useState(mockMessages);
   const [input, setInput] = useState("");
   const [recording, setRecording] = useState(false);
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [currentAct, setCurrentAct] = useState(1);
 
   const role = roleInfo[id || "1"] || roleInfo["1"];
   const isVideoMode = mode === "video";
+
+  const actInfo: Record<number, { title: string; points: string[] }> = {
+    1: { title: "第一幕：安抚情绪", points: ["表达对客户的理解和关心", "使用共情话术缓解对方情绪", "避免争论对错"] },
+    2: { title: "第二幕：了解问题", points: ["通过提问了解事情经过", "确认问题的具体细节", "让客户感到被重视"] },
+    3: { title: "第三幕：提供方案", points: ["给出具体的解决方案", "征求客户的意见", "确认客户是否满意"] },
+  };
 
   const sendMessage = () => {
     if (!input.trim()) return;
@@ -55,23 +63,23 @@ const PracticeSessionPage = () => {
 
   const handleEnd = () => {
     setShowEndDialog(false);
-    navigate("/practice-review");
+    navigate("/practice-complete");
   };
 
-  // Guide bottom sheet
+  // Guide bottom sheet — within mobile container
   const GuideSheet = () => (
     <AnimatePresence>
       {showGuide && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+            className="absolute inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
             onClick={() => setShowGuide(false)}
           />
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
+            className="absolute bottom-0 left-0 right-0 z-[70] rounded-t-[24px] bg-card shadow-2xl"
             style={{ maxHeight: "60vh" }}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -87,19 +95,19 @@ const PracticeSessionPage = () => {
     </AnimatePresence>
   );
 
-  // Hint center popup
+  // Hint center popup — centered within mobile container
   const HintPopup = () => (
     <AnimatePresence>
       {showHint && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-foreground/20"
+            className="absolute inset-0 z-[60] bg-foreground/20"
             onClick={() => setShowHint(false)}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed left-1/2 top-1/2 z-[70] w-[85%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-5 shadow-2xl"
+            className="absolute left-1/2 top-1/2 z-[70] w-[85%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-5 shadow-2xl"
           >
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="h-5 w-5 text-yellow-500" />
@@ -118,7 +126,7 @@ const PracticeSessionPage = () => {
   // Video/Voice mode
   if (isVideoMode) {
     return (
-      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col">
+      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col relative">
         <div className="flex items-center justify-between px-4 py-3 z-10">
           <button onClick={() => navigate(-1)} className="text-white/80"><ArrowLeft className="h-5 w-5" /></button>
           <span className="text-sm font-medium text-white">{role.name}</span>
@@ -130,6 +138,20 @@ const PracticeSessionPage = () => {
         <div className="flex-1 relative flex items-center justify-center">
           <img src={role.avatar} alt={role.name} className="w-full h-full object-cover opacity-80" />
           
+          {/* Scene prompt for script mode */}
+          {scriptMode && (
+            <div className="absolute top-4 left-4 w-[55%] bg-black/60 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+              <p className="text-[10px] text-yellow-400 font-semibold mb-1">{actInfo[currentAct]?.title || "第一幕"}</p>
+              <ul className="space-y-1">
+                {(actInfo[currentAct]?.points || []).map((p, i) => (
+                  <li key={i} className="text-[10px] text-white/80 flex gap-1">
+                    <span className="text-yellow-400 shrink-0">•</span>{p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="absolute top-4 right-4 w-20 h-28 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
             <div className="w-full h-full bg-primary/20 flex items-center justify-center">
               <span className="text-[10px] text-primary font-medium">🎤 你</span>
@@ -184,7 +206,7 @@ const PracticeSessionPage = () => {
 
   // Text mode
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-screen flex-col bg-background relative">
       <div className="sticky top-0 z-10 flex items-center justify-between bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
