@@ -62,6 +62,12 @@ const practiceData: Record<string, {
   },
 };
 
+const tagColor: Record<string, string> = {
+  "自由对话": "bg-primary/10 text-primary",
+  "固定剧本": "bg-accent text-accent-foreground",
+  "文本对练": "bg-muted text-muted-foreground",
+};
+
 const PracticeDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -76,34 +82,30 @@ const PracticeDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Fixed header */}
+      <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
+        <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
+        <h1 className="text-sm font-semibold">{practice.title}</h1>
+      </div>
+
       {/* Video intro area */}
-      <div className="relative h-56 bg-gradient-to-b from-primary/20 to-primary/5 flex items-center justify-center">
-        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm">
-          <ArrowLeft className="h-4 w-4" />
-        </button>
+      <div className="relative h-48 bg-gradient-to-b from-primary/20 to-primary/5 flex items-center justify-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 shadow-lg">
           <Play className="h-7 w-7 text-primary ml-1" />
         </div>
-        <button className="absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-primary font-medium">
-          返回视频 ∨
-        </button>
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-5 -mt-1">
+      <div className="p-4 space-y-5">
         <div>
-          <h1 className="text-lg font-bold">{practice.title}</h1>
+          <h2 className="text-lg font-bold">{practice.title}</h2>
           <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />建议练习时间：{practice.duration}</span>
             <span>|</span>
             <span>剩余机会：{practice.remaining}次</span>
           </div>
           <div className="mt-2 flex items-center gap-2">
-            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
-              practice.tag === "自由对话" ? "bg-primary/10 text-primary" :
-              practice.tag === "固定剧本" ? "bg-accent text-accent-foreground" :
-              "bg-muted text-muted-foreground"
-            }`}>{practice.tag}</span>
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${tagColor[practice.tag] || "bg-muted text-muted-foreground"}`}>{practice.tag}</span>
             <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><Users className="h-3 w-3" />{practice.times}人已练</span>
           </div>
         </div>

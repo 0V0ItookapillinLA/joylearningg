@@ -1,4 +1,4 @@
-import { ChevronRight, BookOpen, Target, Map, BarChart3, History, Settings } from "lucide-react";
+import { ChevronRight, History, Target, Map, BarChart3 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,6 @@ const menuItems = [
   { icon: Target, label: "练习复盘", desc: "共完成24次AI对练", path: "/practice-review" },
   { icon: Map, label: "成长地图", desc: "查看岗位晋升路径", path: "/growth-map" },
   { icon: BarChart3, label: "胜任力评估", desc: "综合评分 78/100", path: "/competency" },
-  { icon: Settings, label: "设置", desc: "账号与通知设置", path: "/" },
 ];
 
 const ProfilePage = () => {
@@ -15,7 +14,6 @@ const ProfilePage = () => {
 
   return (
     <div className="px-4 pb-4">
-      {/* Profile Card */}
       <Card className="mt-4 overflow-hidden">
         <div className="bg-gradient-to-r from-primary to-primary/70 px-5 py-6 text-primary-foreground">
           <div className="flex items-center gap-4">
@@ -42,7 +40,6 @@ const ProfilePage = () => {
         </div>
       </Card>
 
-      {/* Menu Items */}
       <div className="mt-4 space-y-2">
         {menuItems.map((item) => (
           <Card

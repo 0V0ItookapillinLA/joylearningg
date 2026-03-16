@@ -18,10 +18,10 @@ const banners = [
 ];
 
 const quickActions = [
-  { icon: BookOpen, label: "课程库", path: "/learn" },
+  { icon: BookOpen, label: "课程库", path: "/course-library" },
   { icon: Target, label: "AI对练", path: "/practice" },
   { icon: Brain, label: "考试中心", path: "/exam" },
-  { icon: Library, label: "知识库", path: "/learn" },
+  { icon: Library, label: "知识库", path: "/knowledge-base" },
   { icon: Trophy, label: "排行榜", path: "/community" },
 ];
 
@@ -120,7 +120,7 @@ const HomePage = () => {
       <div className="px-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">推荐课程</h3>
-          <button className="text-xs text-primary" onClick={() => navigate("/learn")}>更多</button>
+          <button className="text-xs text-primary" onClick={() => navigate("/course-library")}>更多</button>
         </div>
         <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
           {courses.map((course) => (
