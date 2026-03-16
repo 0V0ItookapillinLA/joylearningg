@@ -134,7 +134,7 @@ const PracticeReviewPage = () => {
     return (
       <div className="min-h-screen bg-background">
         <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
-          <button onClick={() => setSelectedId(null)}><ArrowLeft className="h-5 w-5" /></button>
+          <button onClick={() => { setSelectedId(null); }}><ArrowLeft className="h-5 w-5" /></button>
           <h1 className="text-sm font-semibold">复盘报告</h1>
         </div>
 
