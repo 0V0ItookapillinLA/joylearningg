@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Crown, TrendingUp, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import {
@@ -7,6 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import medalPersistence from "@/assets/medal-persistence.png";
+import medalHighscore from "@/assets/medal-highscore.png";
+import medalPractice from "@/assets/medal-practice.png";
+import medalKnowledge from "@/assets/medal-knowledge.png";
 
 const today = new Date();
 const currentYear = today.getFullYear();
@@ -24,40 +29,47 @@ function getFirstDayOfMonth(year: number, month: number) {
 
 const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
+const medalImages: Record<string, string> = {
+  "坚持达人": medalPersistence,
+  "高水平选手": medalHighscore,
+  "练习狂魔": medalPractice,
+  "求知达人": medalKnowledge,
+};
+
 const medalCategories = [
   {
     name: "坚持达人",
     medals: [
-      { days: 3, title: "坚持达人", desc: "连续3天保持登录", earned: true, date: "2026-01-05", color: "from-amber-400 to-amber-500" },
-      { days: 7, title: "坚持达人", desc: "坚持一周", earned: true, date: "2026-01-12", color: "from-amber-400 to-amber-500" },
-      { days: 14, title: "坚持达人", desc: "两周不间断", earned: false, date: null, color: "from-amber-400 to-amber-500" },
-      { days: 30, title: "坚持达人", desc: "明确定量的月度投入", earned: false, date: null, color: "from-amber-400 to-amber-500" },
-      { days: 50, title: "坚持达人", desc: "跨越50日，纪律性与自律", earned: false, date: null, color: "from-amber-400 to-amber-500" },
+      { days: 3, title: "坚持达人", desc: "连续3天保持登录", earned: true, date: "2026-01-05" },
+      { days: 7, title: "坚持达人", desc: "坚持一周", earned: true, date: "2026-01-12" },
+      { days: 14, title: "坚持达人", desc: "两周不间断", earned: false, date: null },
+      { days: 30, title: "坚持达人", desc: "明确定量的月度投入", earned: false, date: null },
+      { days: 50, title: "坚持达人", desc: "跨越50日，纪律性与自律", earned: false, date: null },
     ],
   },
   {
     name: "高水平选手",
     medals: [
-      { days: 1, title: "高水平选手", desc: "首次获得90分以上", earned: true, date: "2026-02-10", color: "from-blue-400 to-blue-500" },
-      { days: 5, title: "高水平选手", desc: "累计5次90分以上", earned: true, date: "2026-02-28", color: "from-blue-400 to-blue-500" },
-      { days: 10, title: "高水平选手", desc: "累计10次90分以上", earned: false, date: null, color: "from-blue-400 to-blue-500" },
+      { days: 1, title: "高水平选手", desc: "首次获得90分以上", earned: true, date: "2026-02-10" },
+      { days: 5, title: "高水平选手", desc: "累计5次90分以上", earned: true, date: "2026-02-28" },
+      { days: 10, title: "高水平选手", desc: "累计10次90分以上", earned: false, date: null },
     ],
   },
   {
     name: "练习狂魔",
     medals: [
-      { days: 10, title: "练习狂魔", desc: "完成10次练习", earned: true, date: "2026-01-20", color: "from-purple-400 to-purple-500" },
-      { days: 50, title: "练习狂魔", desc: "完成50次练习", earned: true, date: "2026-02-15", color: "from-purple-400 to-purple-500" },
-      { days: 100, title: "练习狂魔", desc: "完成100次练习", earned: false, date: null, color: "from-purple-400 to-purple-500" },
-      { days: 200, title: "练习狂魔", desc: "完成200次练习", earned: false, date: null, color: "from-purple-400 to-purple-500" },
+      { days: 10, title: "练习狂魔", desc: "完成10次练习", earned: true, date: "2026-01-20" },
+      { days: 50, title: "练习狂魔", desc: "完成50次练习", earned: true, date: "2026-02-15" },
+      { days: 100, title: "练习狂魔", desc: "完成100次练习", earned: false, date: null },
+      { days: 200, title: "练习狂魔", desc: "完成200次练习", earned: false, date: null },
     ],
   },
   {
     name: "求知达人",
     medals: [
-      { days: 10, title: "求知达人", desc: "完成10门课程", earned: true, date: "2026-02-01", color: "from-emerald-400 to-emerald-500" },
-      { days: 20, title: "求知达人", desc: "扩展至20门", earned: true, date: "2026-03-01", color: "from-emerald-400 to-emerald-500" },
-      { days: 30, title: "求知达人", desc: "30门体系化学习", earned: false, date: null, color: "from-emerald-400 to-emerald-500" },
+      { days: 10, title: "求知达人", desc: "完成10门课程", earned: true, date: "2026-02-01" },
+      { days: 20, title: "求知达人", desc: "扩展至20门", earned: true, date: "2026-03-01" },
+      { days: 30, title: "求知达人", desc: "30门体系化学习", earned: false, date: null },
     ],
   },
 ];
@@ -75,11 +87,13 @@ const leaderboard = [
   { rank: 8, name: "孙丽", initial: "孙", score: 78.2, medals: 4, dept: "华中区" },
 ];
 
-type Tab = "calendar" | "medals" | "leaderboard";
+type Tab = "leaderboard" | "medals" | "calendar";
 type LeaderboardTab = "total" | "position" | "week";
 
 const CommunityPage = () => {
-  const [activeTab, setActiveTab] = useState<Tab>("calendar");
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab") as Tab | null;
+  const [activeTab, setActiveTab] = useState<Tab>(tabParam && ["leaderboard", "medals", "calendar"].includes(tabParam) ? tabParam : "leaderboard");
   const [viewYear, setViewYear] = useState(currentYear);
   const [viewMonth, setViewMonth] = useState(currentMonth);
   const [lbTab, setLbTab] = useState<LeaderboardTab>("total");
@@ -111,11 +125,17 @@ const CommunityPage = () => {
 
   const topThree = filteredLeaderboard.filter((u) => u.rank <= 3);
 
+  const tabLabels: Record<Tab, string> = {
+    leaderboard: "排行榜",
+    medals: "勋章墙",
+    calendar: "打卡日志",
+  };
+
   return (
     <div className="pb-4">
       <div className="sticky top-0 z-10 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="flex items-center px-4 pt-3">
-          {(["calendar", "medals", "leaderboard"] as Tab[]).map((tab) => (
+          {(["leaderboard", "medals", "calendar"] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -123,111 +143,15 @@ const CommunityPage = () => {
                 activeTab === tab ? "border-b-2 border-primary text-primary" : "text-muted-foreground"
               }`}
             >
-              {tab === "calendar" ? "打卡日历" : tab === "medals" ? "勋章墙" : "排行榜"}
+              {tabLabels[tab]}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Calendar Tab */}
-      {activeTab === "calendar" && (
-        <div className="px-4 pt-4 space-y-4">
-          <Card className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-accent">
-            <div>
-              <h3 className="text-sm font-bold">今日打卡</h3>
-              <p className="text-[11px] text-muted-foreground mt-0.5">坚持学习，养成好习惯 ✨</p>
-            </div>
-            <div className="rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground">
-              已打卡 ✓
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <button onClick={prevMonth}><ChevronLeft className="h-4 w-4 text-muted-foreground" /></button>
-              <span className="text-sm font-semibold">{viewYear}年 {monthNames[viewMonth]}</span>
-              <button onClick={nextMonth} className={isCurrentMonth ? "opacity-30" : ""}>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </div>
-            <div className="grid grid-cols-7 gap-0 mb-2">
-              {["日", "一", "二", "三", "四", "五", "六"].map((d) => (
-                <div key={d} className="text-center text-[10px] text-muted-foreground font-medium py-1">{d}</div>
-              ))}
-            </div>
-            <div className="grid grid-cols-7 gap-0">
-              {calendarDays.map((day, i) => {
-                if (day === null) return <div key={`empty-${i}`} className="h-10" />;
-                const isToday = isCurrentMonth && day === today.getDate();
-                const isChecked = isCurrentMonth && checkedDates.includes(day);
-                return (
-                  <div key={i} className="flex h-10 items-center justify-center">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs ${
-                      isToday ? "bg-primary text-primary-foreground font-bold" :
-                      isChecked ? "bg-primary/15 text-primary font-medium" :
-                      "text-foreground"
-                    }`}>
-                      {day}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-
-          <Card className="grid grid-cols-3 divide-x divide-border py-4">
-            <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">9</span>
-              <span className="text-[10px] text-muted-foreground">本月打卡 天</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">5</span>
-              <span className="text-[10px] text-muted-foreground">连续打卡 天</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">100</span>
-              <span className="text-[10px] text-muted-foreground">累计学习 小时</span>
-            </div>
-          </Card>
-        </div>
-      )}
-
-      {/* Medals Tab */}
-      {activeTab === "medals" && (
-        <div className="px-4 pt-4 space-y-5">
-          {medalCategories.map((cat) => (
-            <Card key={cat.name} className="p-4">
-              <h3 className="text-sm font-bold mb-3">{cat.name}</h3>
-              <div className="grid grid-cols-3 gap-3">
-                {cat.medals.map((medal, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedMedal(medal)}
-                    className="flex flex-col items-center gap-1.5"
-                  >
-                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${
-                      medal.earned
-                        ? `bg-gradient-to-b ${medal.color} shadow-md`
-                        : "bg-muted opacity-40"
-                    }`}>
-                      <span className={`text-lg font-bold ${medal.earned ? "text-white" : "text-muted-foreground"}`}>
-                        {medal.days}
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-medium text-center leading-tight">{medal.title}</span>
-                    <span className="text-[9px] text-muted-foreground text-center leading-tight">{medal.desc}</span>
-                  </button>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
-
       {/* Leaderboard Tab */}
       {activeTab === "leaderboard" && (
         <div className="px-4 pt-4 space-y-4">
-          {/* Sub tabs + department filter */}
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
               {([["total", "总榜"], ["position", "同岗位"], ["week", "周榜"]] as [LeaderboardTab, string][]).map(([key, label]) => (
@@ -242,7 +166,6 @@ const CommunityPage = () => {
                 </button>
               ))}
             </div>
-            {/* Department dropdown */}
             <div className="relative">
               <button
                 onClick={() => setDeptOpen(!deptOpen)}
@@ -269,7 +192,6 @@ const CommunityPage = () => {
             </div>
           </div>
 
-          {/* Podium */}
           <div className="flex items-end justify-center gap-3 pt-4 pb-2">
             {topThree[1] && (
               <div className="flex flex-col items-center">
@@ -339,6 +261,101 @@ const CommunityPage = () => {
         </div>
       )}
 
+      {/* Medals Tab */}
+      {activeTab === "medals" && (
+        <div className="px-4 pt-4 space-y-5">
+          {medalCategories.map((cat) => (
+            <Card key={cat.name} className="p-4">
+              <h3 className="text-sm font-bold mb-3">{cat.name}</h3>
+              <div className="grid grid-cols-3 gap-3">
+                {cat.medals.map((medal, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedMedal(medal)}
+                    className="flex flex-col items-center gap-1.5"
+                  >
+                    <div className={`flex h-16 w-16 items-center justify-center rounded-2xl overflow-hidden ${
+                      medal.earned ? "" : "opacity-30 grayscale"
+                    }`}>
+                      <img
+                        src={medalImages[cat.name]}
+                        alt={medal.title}
+                        className="h-14 w-14 object-contain"
+                      />
+                    </div>
+                    <span className="text-[10px] font-medium text-center leading-tight">{medal.title}</span>
+                    <span className="text-[9px] text-muted-foreground text-center leading-tight">{medal.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Calendar Tab */}
+      {activeTab === "calendar" && (
+        <div className="px-4 pt-4 space-y-4">
+          <Card className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-accent">
+            <div>
+              <h3 className="text-sm font-bold">今日打卡</h3>
+              <p className="text-[11px] text-muted-foreground mt-0.5">坚持学习，养成好习惯 ✨</p>
+            </div>
+            <div className="rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground">
+              已打卡 ✓
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <button onClick={prevMonth}><ChevronLeft className="h-4 w-4 text-muted-foreground" /></button>
+              <span className="text-sm font-semibold">{viewYear}年 {monthNames[viewMonth]}</span>
+              <button onClick={nextMonth} className={isCurrentMonth ? "opacity-30" : ""}>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="grid grid-cols-7 gap-0 mb-2">
+              {["日", "一", "二", "三", "四", "五", "六"].map((d) => (
+                <div key={d} className="text-center text-[10px] text-muted-foreground font-medium py-1">{d}</div>
+              ))}
+            </div>
+            <div className="grid grid-cols-7 gap-0">
+              {calendarDays.map((day, i) => {
+                if (day === null) return <div key={`empty-${i}`} className="h-10" />;
+                const isToday = isCurrentMonth && day === today.getDate();
+                const isChecked = isCurrentMonth && checkedDates.includes(day);
+                return (
+                  <div key={i} className="flex h-10 items-center justify-center">
+                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs ${
+                      isToday ? "bg-primary text-primary-foreground font-bold" :
+                      isChecked ? "bg-primary/15 text-primary font-medium" :
+                      "text-foreground"
+                    }`}>
+                      {day}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Card className="grid grid-cols-3 divide-x divide-border py-4">
+            <div className="flex flex-col items-center">
+              <span className="text-xl font-bold text-primary">9</span>
+              <span className="text-[10px] text-muted-foreground">本月打卡 天</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-xl font-bold text-primary">5</span>
+              <span className="text-[10px] text-muted-foreground">连续打卡 天</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-xl font-bold text-primary">100</span>
+              <span className="text-[10px] text-muted-foreground">累计学习 小时</span>
+            </div>
+          </Card>
+        </div>
+      )}
+
       <Dialog open={!!selectedMedal} onOpenChange={() => setSelectedMedal(null)}>
         <DialogContent className="max-w-[320px] rounded-2xl">
           <DialogHeader>
@@ -346,14 +363,14 @@ const CommunityPage = () => {
           </DialogHeader>
           {selectedMedal && (
             <div className="flex flex-col items-center gap-3 py-2">
-              <div className={`flex h-20 w-20 items-center justify-center rounded-2xl ${
-                selectedMedal.earned
-                  ? `bg-gradient-to-b ${selectedMedal.color} shadow-lg`
-                  : "bg-muted"
+              <div className={`flex h-20 w-20 items-center justify-center rounded-2xl overflow-hidden ${
+                selectedMedal.earned ? "" : "opacity-40 grayscale"
               }`}>
-                <span className={`text-2xl font-bold ${selectedMedal.earned ? "text-white" : "text-muted-foreground"}`}>
-                  {selectedMedal.days}
-                </span>
+                <img
+                  src={medalImages[selectedMedal.title]}
+                  alt={selectedMedal.title}
+                  className="h-16 w-16 object-contain"
+                />
               </div>
               <p className="text-xs text-center text-muted-foreground">{selectedMedal.desc}</p>
               {selectedMedal.earned && selectedMedal.date ? (
