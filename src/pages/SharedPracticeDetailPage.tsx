@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { ArrowLeft, Heart, MessageCircle, Star, Share2, ThumbsUp, Send } from "lucide-react";
+import { ArrowLeft, ThumbsUp, Star, MessageCircle, Send, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 const practiceDetail = {
   id: 1,
@@ -21,15 +22,23 @@ const practiceDetail = {
     { role: "user" as const, text: "您说得对，您花了不少钱，肯定期望有好的体验。请问您方便告诉我具体是在什么场景下出现的噪音吗？" },
     { role: "ai" as const, text: "就是晚上睡觉的时候，嗡嗡响根本没法睡！" },
     { role: "user" as const, text: "完全理解，晚间噪音确实很影响休息。我这边有两个方案可以帮您：第一是免费上门检测调试，第二是为您更换同型号新品，您看哪个方案更合适？" },
+    { role: "ai" as const, text: "你们能保证换了之后就没有噪音了吗？" },
+    { role: "user" as const, text: "当然可以。我们的新批次产品已经升级了静音模块，噪音值降低了60%以上。如果您选择更换，我们还会赠送一年延保服务。" },
+    { role: "ai" as const, text: "那换货需要多长时间？我可不想等太久。" },
+    { role: "user" as const, text: "王先生放心，我们会在48小时内安排送货上门，同时回收旧机。期间如果您有任何问题，可以随时联系我，我是您的专属客服小李。" },
+    { role: "ai" as const, text: "嗯，那行吧，先试试看。" },
+    { role: "user" as const, text: "感谢您的信任！我现在就为您提交换货申请，稍后会发短信通知您物流进度。祝您生活愉快，再见！" },
   ],
   comments: [
-    { id: 1, user: "销售达人", avatar: "🔥", text: "开场的共情处理得很好，值得学习！", likes: 32, time: "2小时前" },
-    { id: 2, user: "培训师老张", avatar: "👨‍🏫", text: "第三句的需求确认做得很专业，但建议在提供方案前可以多了解一些使用细节", likes: 28, time: "5小时前" },
-    { id: 3, user: "新人小白", avatar: "🌱", text: "学到了，原来异议处理要先共情再解决问题", likes: 15, time: "1天前" },
+    { id: 1, user: "销售达人", avatar: "🔥", text: "开场的共情处理得很好，值得学习！", likes: 32, time: "2026-03-15" },
+    { id: 2, user: "培训师老张", avatar: "👨‍🏫", text: "第三句的需求确认做得很专业，但建议在提供方案前可以多了解一些使用细节", likes: 28, time: "2026-03-14" },
+    { id: 3, user: "新人小白", avatar: "🌱", text: "学到了，原来异议处理要先共情再解决问题", likes: 15, time: "2026-03-13" },
+    { id: 4, user: "客服主管李姐", avatar: "👩‍💼", text: "提供两个方案让客户选择这个技巧很实用，给了客户掌控感", likes: 42, time: "2026-03-12" },
+    { id: 5, user: "资深销售老王", avatar: "💼", text: "最后主动告知后续跟进流程很加分，客户体验闭环做得好", likes: 19, time: "2026-03-11" },
+    { id: 6, user: "培训新人小陈", avatar: "📚", text: "这个对练记录收藏了，准备背下来当话术模板", likes: 8, time: "2026-03-10" },
   ],
   likes: 342,
   stars: 89,
-  shares: 45,
 };
 
 const tagColor: Record<string, string> = {
@@ -41,10 +50,20 @@ const tagColor: Record<string, string> = {
 const SharedPracticeDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [tab, setTab] = useState<"chat" | "comments">("chat");
   const [liked, setLiked] = useState(false);
   const [starred, setStarred] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(false);
   const [commentInput, setCommentInput] = useState("");
+  const [comments, setComments] = useState(practiceDetail.comments);
+
+  const handleSendComment = () => {
+    if (!commentInput.trim()) return;
+    setComments([
+      { id: Date.now(), user: "我", avatar: "😊", text: commentInput, likes: 0, time: "刚刚" },
+      ...comments,
+    ]);
+    setCommentInput("");
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -82,11 +101,8 @@ const SharedPracticeDetailPage = () => {
             <p className="text-[11px] text-muted-foreground">{practiceDetail.caseIntro}</p>
           </Card>
 
+          {/* Only like + collect + comment */}
           <div className="flex items-center justify-around py-3 border-y border-border mb-3">
-            <button className="flex flex-col items-center gap-0.5 text-muted-foreground">
-              <MessageCircle className="h-5 w-5" />
-              <span className="text-[10px]">讨论</span>
-            </button>
             <button
               className={`flex flex-col items-center gap-0.5 ${liked ? "text-destructive" : "text-muted-foreground"}`}
               onClick={() => setLiked(!liked)}
@@ -101,31 +117,21 @@ const SharedPracticeDetailPage = () => {
               <Star className={`h-5 w-5 ${starred ? "fill-current" : ""}`} />
               <span className="text-[10px]">收藏</span>
             </button>
-            <button className="flex flex-col items-center gap-0.5 text-muted-foreground">
-              <Share2 className="h-5 w-5" />
-              <span className="text-[10px]">分享</span>
+            <button
+              className="flex flex-col items-center gap-0.5 text-muted-foreground"
+              onClick={() => setCommentOpen(true)}
+            >
+              <MessageCircle className="h-5 w-5" />
+              <span className="text-[10px]">评论</span>
             </button>
           </div>
         </div>
 
-        <div className="flex border-b border-border px-4">
-          <button
-            onClick={() => setTab("chat")}
-            className={`flex-1 pb-2 text-center text-xs font-semibold ${tab === "chat" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-          >
-            对练记录
-          </button>
-          <button
-            onClick={() => setTab("comments")}
-            className={`flex-1 pb-2 text-center text-xs font-semibold ${tab === "comments" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-          >
-            评论 ({practiceDetail.comments.length})
-          </button>
-        </div>
-
-        {tab === "chat" && (
-          <div className="p-4 space-y-3">
-            <p className="text-center text-[10px] text-muted-foreground mb-3">角色由AI扮演，仅作练习参考</p>
+        {/* Chat record */}
+        <div className="px-4 pb-4">
+          <h3 className="text-xs font-semibold mb-3">对练记录</h3>
+          <p className="text-center text-[10px] text-muted-foreground mb-3">角色由AI扮演，仅作练习参考</p>
+          <div className="space-y-3">
             {practiceDetail.conversation.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
@@ -138,42 +144,74 @@ const SharedPracticeDetailPage = () => {
               </div>
             ))}
           </div>
-        )}
-
-        {tab === "comments" && (
-          <div className="p-4 space-y-4">
-            {practiceDetail.comments.map((c) => (
-              <div key={c.id} className="flex gap-2.5">
-                <span className="text-lg shrink-0">{c.avatar}</span>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium">{c.user}</span>
-                    <span className="text-[10px] text-muted-foreground">{c.time}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-foreground">{c.text}</p>
-                  <button className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
-                    <ThumbsUp className="h-3 w-3" />{c.likes}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        </div>
       </div>
 
-      {tab === "comments" && (
-        <div className="border-t border-border bg-card p-3 flex items-center gap-2">
-          <Input
-            value={commentInput}
-            onChange={(e) => setCommentInput(e.target.value)}
-            placeholder="写下你的评论..."
-            className="h-9 text-xs"
-          />
-          <Button size="icon" className="h-9 w-9 shrink-0">
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
+      {/* TikTok-style half-screen comment panel */}
+      <AnimatePresence>
+        {commentOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/40"
+              onClick={() => setCommentOpen(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-card rounded-t-2xl"
+              style={{ height: "55vh" }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+                <span className="text-sm font-semibold">{comments.length} 条评论</span>
+                <button onClick={() => setCommentOpen(false)}>
+                  <X className="h-5 w-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              {/* Comment list */}
+              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+                {comments.map((c) => (
+                  <div key={c.id} className="flex gap-2.5">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm">
+                      {c.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium">{c.user}</span>
+                        <span className="text-[10px] text-muted-foreground">{c.time}</span>
+                      </div>
+                      <p className="mt-1 text-xs text-foreground">{c.text}</p>
+                      <button className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <ThumbsUp className="h-3 w-3" />{c.likes}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Fixed input at bottom */}
+              <div className="border-t border-border bg-card p-3 flex items-center gap-2 shrink-0">
+                <Input
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                  placeholder="写下你的评论..."
+                  className="h-9 text-xs"
+                  onKeyDown={(e) => e.key === "Enter" && handleSendComment()}
+                />
+                <Button size="icon" className="h-9 w-9 shrink-0" onClick={handleSendComment}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

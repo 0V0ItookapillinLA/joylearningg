@@ -22,7 +22,7 @@ const quickActions = [
   { icon: Target, label: "AI对练", path: "/practice" },
   { icon: Brain, label: "考试中心", path: "/exam" },
   { icon: Library, label: "知识库", path: "/knowledge-base" },
-  { icon: Trophy, label: "排行榜", path: "/community" },
+  { icon: Trophy, label: "排行榜", path: "/community?tab=leaderboard" },
 ];
 
 const courses = [

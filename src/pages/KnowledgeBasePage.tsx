@@ -16,10 +16,10 @@ const hotTools = [
 ];
 
 const hotCases = [
-  { title: "如何给自视高的低绩效员工反馈？", score: 8.4, type: "示范案例", views: 25, locked: true },
-  { title: "如何给迷茫的低绩效员工反馈？", score: 7.8, type: "示范案例", views: 18, locked: true },
-  { title: "客户投诉升级处理全流程", score: 9.1, type: "优秀案例", views: 156, locked: false },
-  { title: "大客户谈判成功复盘", score: 8.7, type: "优秀案例", views: 89, locked: false },
+  { title: "如何给自视高的低绩效员工反馈？", score: 8.4, type: "示范案例", views: 25 },
+  { title: "如何给迷茫的低绩效员工反馈？", score: 7.8, type: "示范案例", views: 18 },
+  { title: "客户投诉升级处理全流程", score: 9.1, type: "优秀案例", views: 156 },
+  { title: "大客户谈判成功复盘", score: 8.7, type: "优秀案例", views: 89 },
 ];
 
 const KnowledgeBasePage = () => {
@@ -34,15 +34,6 @@ const KnowledgeBasePage = () => {
       </div>
 
       <div className="p-4 space-y-5">
-        {/* Hero card */}
-        <div className="rounded-2xl bg-gradient-to-r from-primary/80 to-primary p-4 text-white">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-base font-bold">智能问答</span>
-            <span className="text-lg">›</span>
-          </div>
-          <p className="text-xs text-white/80">业务困惑随需发问</p>
-        </div>
-
         {/* Category cards */}
         <div className="grid grid-cols-3 gap-2.5">
           {categories.map((cat) => (
@@ -81,7 +72,6 @@ const KnowledgeBasePage = () => {
                 </div>
                 <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
                   <span>{c.views}浏览</span>
-                  {c.locked && <span className="text-primary">🔒 完成练习可解锁</span>}
                 </div>
               </Card>
             ))}
