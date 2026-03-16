@@ -116,24 +116,29 @@ const PracticeSessionPage = () => {
       {showHint && (
         <>
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] bg-foreground/20"
             onClick={() => setShowHint(false)}
           />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed z-[70] w-[85%] max-w-[360px] rounded-2xl bg-card p-5 shadow-2xl"
-            style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Lightbulb className="h-5 w-5 text-yellow-500" />
-              <h3 className="text-sm font-semibold">实时提示</h3>
-            </div>
-            <p className="text-xs leading-relaxed text-foreground">{guidanceText}</p>
-            <Button size="sm" className="w-full mt-4 rounded-xl" onClick={() => setShowHint(false)}>
-              知道了
-            </Button>
-          </motion.div>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-[85%] max-w-[360px] rounded-2xl bg-card p-5 shadow-2xl"
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <h3 className="text-sm font-semibold">实时提示</h3>
+              </div>
+              <p className="text-xs leading-relaxed text-foreground">{guidanceText}</p>
+              <Button size="sm" className="mt-4 w-full rounded-xl" onClick={() => setShowHint(false)}>
+                知道了
+              </Button>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
