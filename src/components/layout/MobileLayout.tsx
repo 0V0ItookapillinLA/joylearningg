@@ -81,8 +81,8 @@ const MobileLayout = () => {
               initial={{ y: "100%", opacity: 0.5 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: "100%", opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 350, mass: 0.8 }}
-              className="fixed bottom-0 left-1/2 z-[70] w-full max-w-[430px] -translate-x-1/2 flex flex-col rounded-t-[28px] border-t border-border/50 bg-card shadow-2xl overflow-hidden"
+              transition={{ type: "spring", damping: 28, stiffness: 300, mass: 0.8 }}
+              className="fixed inset-x-0 bottom-0 z-[70] mx-auto w-full max-w-[430px] flex flex-col rounded-t-[28px] border-t border-border/50 bg-card shadow-2xl overflow-hidden"
               style={{ height: "66dvh" }}
             >
               {/* Header with AI glow */}
