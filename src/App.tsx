@@ -17,6 +17,9 @@ import GrowthMapPage from "@/pages/GrowthMapPage";
 import CompetencyPage from "@/pages/CompetencyPage";
 import SharedPracticeDetailPage from "@/pages/SharedPracticeDetailPage";
 import PlanDetailPage from "@/pages/PlanDetailPage";
+import PracticeDetailPage from "@/pages/PracticeDetailPage";
+import PracticeSessionPage from "@/pages/PracticeSessionPage";
+import CourseDetailPage from "@/pages/CourseDetailPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,7 +39,10 @@ const App = () => (
           </Route>
           <Route path="/fragment-learn" element={<FragmentLearnPage />} />
           <Route path="/chapter/:id" element={<ChapterDetailPage />} />
+          <Route path="/course/:id" element={<CourseDetailPage />} />
           <Route path="/practice" element={<AIPracticePage />} />
+          <Route path="/practice-detail/:id" element={<PracticeDetailPage />} />
+          <Route path="/practice-session/:id" element={<PracticeSessionPage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/practice-review" element={<PracticeReviewPage />} />
           <Route path="/growth-map" element={<GrowthMapPage />} />
