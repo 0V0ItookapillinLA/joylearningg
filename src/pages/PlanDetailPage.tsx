@@ -85,11 +85,12 @@ const PlanDetailPage = () => {
 
   const handleItemClick = (item: typeof planData.phases[0]["items"][0]) => {
     if (item.type === "video") {
-      navigate(`/course/${item.id}?type=video`);
+      navigate(`/video/${item.id}`);
     } else if (item.type === "doc") {
-      navigate(`/course/${item.id}?type=pdf`);
+      navigate(`/doc/${item.id}`);
     } else if (item.type === "practice") {
-      navigate(`/practice-detail/${item.id}`);
+      const targetId = "targetId" in item && item.targetId ? item.targetId : item.id;
+      navigate(`/practice-detail/${targetId}`);
     }
   };
 

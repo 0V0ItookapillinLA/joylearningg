@@ -159,23 +159,26 @@ const PracticeSessionPage = () => {
         <div className="flex-1 relative flex items-center justify-center overflow-hidden">
           <img src={role.avatar} alt={role.name} className="w-full h-full object-cover opacity-80" />
           
-          {/* Scene prompt for script mode */}
-          {scriptMode && (
-            <div className="absolute top-4 left-4 w-[55%] bg-black/60 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-              <p className="text-[10px] text-yellow-400 font-semibold mb-1">{actInfo[currentAct]?.title || "第一幕"}</p>
-              <ul className="space-y-1">
-                {(actInfo[currentAct]?.points || []).map((p, i) => (
-                  <li key={i} className="text-[10px] text-white/80 flex gap-1">
-                    <span className="text-yellow-400 shrink-0">•</span>{p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className="absolute top-4 left-4 right-4 flex items-start gap-3">
+            {scriptMode && (
+              <div className="flex-1 rounded-[28px] bg-card/95 p-4 text-card-foreground shadow-2xl backdrop-blur-md">
+                <div className="flex items-baseline gap-2">
+                  <p className="text-lg font-bold">{actInfo[currentAct]?.title || "第一幕"}</p>
+                  <span className="text-sm text-muted-foreground">({actInfo[currentAct]?.step || "1/3"})</span>
+                </div>
+                <p className="mt-3 text-sm leading-7 text-foreground/90">
+                  {actInfo[currentAct]?.intro}
+                </p>
+                <p className="mt-4 text-sm font-semibold text-foreground">
+                  目标：<span className="font-normal text-foreground/80">{actInfo[currentAct]?.goal}</span>
+                </p>
+              </div>
+            )}
 
-          <div className="absolute top-4 right-4 w-20 h-28 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
-            <div className="w-full h-full bg-primary/20 flex items-center justify-center">
-              <span className="text-[10px] text-primary font-medium">🎤 你</span>
+            <div className={`overflow-hidden rounded-[22px] border-2 border-white/30 shadow-lg ${scriptMode ? "h-28 w-24 shrink-0" : "ml-auto h-28 w-20"}`}>
+              <div className="flex h-full w-full items-center justify-center bg-primary/20">
+                <span className="text-[10px] font-medium text-primary">🎤 你</span>
+              </div>
             </div>
           </div>
 
