@@ -49,10 +49,25 @@ const PracticeSessionPage = () => {
   const role = roleInfo[id || "1"] || roleInfo["1"];
   const isVideoMode = mode === "video";
 
-  const actInfo: Record<number, { title: string; points: string[] }> = {
-    1: { title: "第一幕：安抚情绪", points: ["表达对客户的理解和关心", "使用共情话术缓解对方情绪", "避免争论对错"] },
-    2: { title: "第二幕：了解问题", points: ["通过提问了解事情经过", "确认问题的具体细节", "让客户感到被重视"] },
-    3: { title: "第三幕：提供方案", points: ["给出具体的解决方案", "征求客户的意见", "确认客户是否满意"] },
+  const actInfo: Record<number, { title: string; step: string; intro: string; goal: string }> = {
+    1: {
+      title: "第一幕",
+      step: "1/3",
+      intro: "先稳定对方情绪，建立继续沟通的意愿，避免一开始就争论责任归属。",
+      goal: "让对方愿意继续说明问题，并确认当前最核心的不满点。",
+    },
+    2: {
+      title: "第二幕",
+      step: "2/3",
+      intro: "围绕问题细节进行追问，确认背景、经过和影响，体现你在认真处理。",
+      goal: "把问题关键信息问清楚，让对方感受到被重视和被理解。",
+    },
+    3: {
+      title: "第三幕",
+      step: "3/3",
+      intro: "给出明确可执行的解决方案，并与对方确认接受条件与后续安排。",
+      goal: "推动对方接受解决方案，并完成本轮沟通收口。",
+    },
   };
 
   const sendMessage = () => {
@@ -101,24 +116,29 @@ const PracticeSessionPage = () => {
       {showHint && (
         <>
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] bg-foreground/20"
             onClick={() => setShowHint(false)}
           />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed z-[70] w-[85%] max-w-[360px] rounded-2xl bg-card p-5 shadow-2xl"
-            style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Lightbulb className="h-5 w-5 text-yellow-500" />
-              <h3 className="text-sm font-semibold">实时提示</h3>
-            </div>
-            <p className="text-xs leading-relaxed text-foreground">{guidanceText}</p>
-            <Button size="sm" className="w-full mt-4 rounded-xl" onClick={() => setShowHint(false)}>
-              知道了
-            </Button>
-          </motion.div>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-[85%] max-w-[360px] rounded-2xl bg-card p-5 shadow-2xl"
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <h3 className="text-sm font-semibold">实时提示</h3>
+              </div>
+              <p className="text-xs leading-relaxed text-foreground">{guidanceText}</p>
+              <Button size="sm" className="mt-4 w-full rounded-xl" onClick={() => setShowHint(false)}>
+                知道了
+              </Button>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
@@ -139,23 +159,26 @@ const PracticeSessionPage = () => {
         <div className="flex-1 relative flex items-center justify-center overflow-hidden">
           <img src={role.avatar} alt={role.name} className="w-full h-full object-cover opacity-80" />
           
-          {/* Scene prompt for script mode */}
-          {scriptMode && (
-            <div className="absolute top-4 left-4 w-[55%] bg-black/60 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-              <p className="text-[10px] text-yellow-400 font-semibold mb-1">{actInfo[currentAct]?.title || "第一幕"}</p>
-              <ul className="space-y-1">
-                {(actInfo[currentAct]?.points || []).map((p, i) => (
-                  <li key={i} className="text-[10px] text-white/80 flex gap-1">
-                    <span className="text-yellow-400 shrink-0">•</span>{p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className="absolute top-4 left-4 right-4 flex items-start gap-3">
+            {scriptMode && (
+              <div className="flex-1 rounded-[28px] bg-card/95 p-4 text-card-foreground shadow-2xl backdrop-blur-md">
+                <div className="flex items-baseline gap-2">
+                  <p className="text-lg font-bold">{actInfo[currentAct]?.title || "第一幕"}</p>
+                  <span className="text-sm text-muted-foreground">({actInfo[currentAct]?.step || "1/3"})</span>
+                </div>
+                <p className="mt-3 text-sm leading-7 text-foreground/90">
+                  {actInfo[currentAct]?.intro}
+                </p>
+                <p className="mt-4 text-sm font-semibold text-foreground">
+                  目标：<span className="font-normal text-foreground/80">{actInfo[currentAct]?.goal}</span>
+                </p>
+              </div>
+            )}
 
-          <div className="absolute top-4 right-4 w-20 h-28 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg">
-            <div className="w-full h-full bg-primary/20 flex items-center justify-center">
-              <span className="text-[10px] text-primary font-medium">🎤 你</span>
+            <div className={`overflow-hidden rounded-[22px] border-2 border-white/30 shadow-lg ${scriptMode ? "h-28 w-24 shrink-0" : "ml-auto h-28 w-20"}`}>
+              <div className="flex h-full w-full items-center justify-center bg-primary/20">
+                <span className="text-[10px] font-medium text-primary">🎤 你</span>
+              </div>
             </div>
           </div>
 
