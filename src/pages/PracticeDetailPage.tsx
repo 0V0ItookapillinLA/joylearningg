@@ -79,12 +79,15 @@ const PracticeDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const practice = practiceData[id || "1"] || practiceData["1"];
+  const [showGuide, setShowGuide] = useState(false);
 
   const getModeRoute = () => {
     const isScript = practice.tag === "固定剧本";
     if (practice.tag === "文本对练") return `/practice-session/${id}?mode=text`;
     return `/practice-session/${id}?mode=video${isScript ? "&script=true" : ""}`;
   };
+
+  const guideContent = `本练习模拟${practice.title}场景。\n\n🎯 练习目标：\n${practice.focuses.map(f => "• " + f.desc).join("\n")}\n\n⚠️ 注意事项：\n• 注意控制沟通节奏\n• 保持专业态度\n• 灵活应对各种情况`;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
