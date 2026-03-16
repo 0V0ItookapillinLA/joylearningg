@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import roleCustomerService from "@/assets/role-customer-service.png";
 import roleSalesManager from "@/assets/role-sales-manager.png";
@@ -8,17 +8,25 @@ import roleAngryCustomer from "@/assets/role-angry-customer.png";
 import roleNegotiator from "@/assets/role-negotiator.png";
 
 const viewTabs = ["按实操练习", "按角色练习"];
-const filterTabs = ["全部练习", "基本功", "自由练习", "客户服务", "谈判技巧"];
 
 const practices = [
-  { id: 1, tag: "#识别并表达情绪", title: "因觉得不被需要和孤独的忧郁老年人", avatar: roleAngryCustomer, mode: "自由对话", times: 22800, featured: true },
-  { id: 2, tag: "#建构良好的咨访关系", title: "完美主义高二女生的社交自救计划", avatar: roleCustomerService, mode: "固定剧本", times: 7100, featured: true },
-  { id: 3, tag: "#设定咨询目标", title: "恐惧突围：完美主义高二女生的社交自救", avatar: roleSalesManager, mode: "自由对话", times: 1000, featured: false },
-  { id: 4, tag: "#建立咨访关系", title: "处于瓶颈期的家庭事业双重压力人", avatar: roleNegotiator, mode: "文本对练", times: 4200, featured: false },
-  { id: 5, tag: "#尊重", title: "离婚后陷入绝望的工厂主管", avatar: roleAngryCustomer, mode: "固定剧本", times: 2500, featured: false },
-  { id: 6, tag: "#面质", title: "在职场压力下寻找自我价值的产品经理", avatar: roleCustomerService, mode: "自由对话", times: 2000, featured: false },
-  { id: 7, tag: "#心理危机状态评估", title: "丧妻后情感崩溃的退休工人", avatar: roleSalesManager, mode: "文本对练", times: 1900, featured: false },
-  { id: 8, tag: "#尊重", title: "因学业压力与社交孤立的中度焦虑高一男生", avatar: roleNegotiator, mode: "固定剧本", times: 1600, featured: false },
+  { id: 1, title: "客户投诉处理实战", avatar: roleAngryCustomer, mode: "自由对话", times: 22800, desc: "模拟客户因产品质量问题投诉的场景" },
+  { id: 2, title: "首次电话销售沟通", avatar: roleCustomerService, mode: "固定剧本", times: 7100, desc: "新客户首次电话沟通的标准流程训练" },
+  { id: 3, title: "价格谈判攻防战", avatar: roleSalesManager, mode: "自由对话", times: 5200, desc: "应对客户压价的多种谈判策略演练" },
+  { id: 4, title: "大客户需求挖掘", avatar: roleNegotiator, mode: "文本对练", times: 4200, desc: "运用SPIN法则深度挖掘客户需求" },
+  { id: 5, title: "竞品对比应对话术", avatar: roleAngryCustomer, mode: "固定剧本", times: 3500, desc: "当客户提到竞品优势时的专业回应" },
+  { id: 6, title: "售后回访技巧", avatar: roleCustomerService, mode: "自由对话", times: 2800, desc: "提升客户满意度的售后回访话术训练" },
+  { id: 7, title: "产品演示与讲解", avatar: roleSalesManager, mode: "文本对练", times: 1900, desc: "用FABE法则进行产品优势演示" },
+  { id: 8, title: "客户跟进与促单", avatar: roleNegotiator, mode: "固定剧本", times: 1600, desc: "多次跟进后如何有效推动成交" },
+];
+
+const roleList = [
+  { id: 1, name: "客服小美", desc: "耐心温柔的客服代表，擅长倾听和安抚客户情绪", avatar: roleCustomerService, tag: "客户服务", practices: 12 },
+  { id: 2, name: "销售经理张总", desc: "经验丰富的销售导师，了解各种成交技巧", avatar: roleSalesManager, tag: "销售培训", practices: 8 },
+  { id: 3, name: "难缠客户王先生", desc: "挑剔易怒的投诉客户，考验你的情绪管理能力", avatar: roleAngryCustomer, tag: "投诉处理", practices: 15 },
+  { id: 4, name: "谈判专家李总", desc: "精明的商务谈判对手，在价格上寸步不让", avatar: roleNegotiator, tag: "商务谈判", practices: 10 },
+  { id: 5, name: "新客户赵小姐", desc: "首次接触产品的潜在客户，需要专业引导", avatar: roleCustomerService, tag: "新客开发", practices: 6 },
+  { id: 6, name: "采购经理陈总", desc: "注重性价比的企业采购决策者", avatar: roleSalesManager, tag: "B2B销售", practices: 9 },
 ];
 
 const tagColor: Record<string, string> = {
@@ -29,8 +37,14 @@ const tagColor: Record<string, string> = {
 
 const AIPracticePage = () => {
   const navigate = useNavigate();
-  const [viewTab, setViewTab] = useState(0);
-  const [filterTab, setFilterTab] = useState(0);
+  const [searchParams] = useSearchParams();
+  const initialTab = parseInt(searchParams.get("tab") || "0");
+  const [viewTab, setViewTab] = useState(initialTab);
+
+  useEffect(() => {
+    const t = parseInt(searchParams.get("tab") || "0");
+    if (t === 0 || t === 1) setViewTab(t);
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,8 +54,7 @@ const AIPracticePage = () => {
           <h1 className="text-sm font-semibold">AI 对练</h1>
           <button className="ml-auto"><Search className="h-4.5 w-4.5 text-muted-foreground" /></button>
         </div>
-        {/* View tabs */}
-        <div className="flex gap-4 px-4 pb-1">
+        <div className="flex gap-4 px-4 pb-2">
           {viewTabs.map((tab, i) => (
             <button
               key={tab}
@@ -54,51 +67,53 @@ const AIPracticePage = () => {
             </button>
           ))}
         </div>
-        {/* Filter tabs */}
-        <div className="flex gap-1 px-4 pb-2 overflow-x-auto hide-scrollbar">
-          {filterTabs.map((tab, i) => (
-            <button
-              key={tab}
-              onClick={() => setFilterTab(i)}
-              className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                filterTab === i ? "bg-foreground text-background" : "text-muted-foreground"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* Practice grid */}
-      <div className="p-4">
-        <div className="grid grid-cols-2 gap-3">
+      {viewTab === 0 && (
+        <div className="p-4 space-y-3">
           {practices.map((p) => (
             <Card
               key={p.id}
-              className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+              className="flex gap-3 p-3 cursor-pointer hover:shadow-md transition-shadow"
               onClick={() => navigate(`/practice-detail/${p.id}`)}
             >
-              <div className="relative bg-gradient-to-br from-primary/5 to-accent/30 p-3 pb-2">
-                <span className="text-[10px] text-primary font-medium">{p.tag}</span>
-                {p.featured && (
-                  <span className="absolute top-2 right-2 rounded bg-destructive px-1.5 py-0.5 text-[9px] font-bold text-white">大咖出题</span>
-                )}
-              </div>
-              <div className="flex items-start gap-2 p-3 pt-1">
-                <img src={p.avatar} alt="" className="h-10 w-10 rounded-full object-cover shrink-0 bg-muted" />
-                <h4 className="text-xs font-semibold leading-tight line-clamp-2">{p.title}</h4>
-              </div>
-              <div className="px-3 pb-3 flex items-center justify-between">
-                <span className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${tagColor[p.mode] || "bg-muted text-muted-foreground"}`}>
-                  {p.mode}
-                </span>
-                <span className="text-[10px] text-muted-foreground">{p.times.toLocaleString()}+人次练过</span>
+              <img src={p.avatar} alt="" className="h-14 w-14 rounded-xl object-cover shrink-0 bg-muted" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${tagColor[p.mode] || "bg-muted text-muted-foreground"}`}>
+                    {p.mode}
+                  </span>
+                </div>
+                <h4 className="text-xs font-semibold leading-tight">{p.title}</h4>
+                <p className="mt-0.5 text-[10px] text-muted-foreground line-clamp-1">{p.desc}</p>
+                <span className="mt-1 text-[10px] text-muted-foreground">{p.times.toLocaleString()}人已练</span>
               </div>
             </Card>
           ))}
         </div>
-      </div>
+      )}
+
+      {viewTab === 1 && (
+        <div className="p-4 space-y-3">
+          {roleList.map((role) => (
+            <Card
+              key={role.id}
+              className="flex gap-3 p-4 cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => navigate(`/practice-session/${role.id}?mode=text`)}
+            >
+              <img src={role.avatar} alt={role.name} className="h-14 w-14 rounded-full object-cover shrink-0 bg-muted" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h4 className="text-xs font-semibold">{role.name}</h4>
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] text-primary font-medium">{role.tag}</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground line-clamp-2">{role.desc}</p>
+                <span className="mt-1 inline-block text-[10px] text-muted-foreground">{role.practices}个练习场景</span>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

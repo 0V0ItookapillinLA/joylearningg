@@ -1,12 +1,13 @@
-import { ChevronRight, History, Target, Map, BarChart3 } from "lucide-react";
+import { ChevronRight, BarChart3, History, Map, Compass, Target } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
 const menuItems = [
-  { icon: History, label: "课程历史", desc: "已学3门 · 在学2门", path: "/learn" },
-  { icon: Target, label: "练习复盘", desc: "共完成24次AI对练", path: "/practice-review" },
+  { icon: BarChart3, label: "综合评价", desc: "综合能力评分 82.7/100", path: "/comprehensive-eval" },
+  { icon: History, label: "练习复盘", desc: "共完成24次AI对练", path: "/practice-review" },
   { icon: Map, label: "成长地图", desc: "查看岗位晋升路径", path: "/growth-map" },
-  { icon: BarChart3, label: "胜任力评估", desc: "综合评分 78/100", path: "/competency" },
+  { icon: Compass, label: "学习地图", desc: "游戏化学习闯关", path: "/learning-map" },
+  { icon: Target, label: "胜任力评估", desc: "综合评分 78/100", path: "/competency" },
 ];
 
 const ProfilePage = () => {
