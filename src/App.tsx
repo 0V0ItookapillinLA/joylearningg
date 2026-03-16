@@ -21,7 +21,10 @@ import SharedPracticeDetailPage from "@/pages/SharedPracticeDetailPage";
 import PlanDetailPage from "@/pages/PlanDetailPage";
 import PracticeDetailPage from "@/pages/PracticeDetailPage";
 import PracticeSessionPage from "@/pages/PracticeSessionPage";
+import PracticeCompletePage from "@/pages/PracticeCompletePage";
 import CourseDetailPage from "@/pages/CourseDetailPage";
+import VideoPlayerPage from "@/pages/VideoPlayerPage";
+import DocViewerPage from "@/pages/DocViewerPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
 import NotFound from "@/pages/NotFound";
 
@@ -43,11 +46,14 @@ const App = () => (
           <Route path="/fragment-learn" element={<FragmentLearnPage />} />
           <Route path="/chapter/:id" element={<ChapterDetailPage />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
+          <Route path="/video/:id" element={<VideoPlayerPage />} />
+          <Route path="/doc/:id" element={<DocViewerPage />} />
           <Route path="/course-library" element={<KnowledgeBasePage />} />
           <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
           <Route path="/practice" element={<AIPracticePage />} />
           <Route path="/practice-detail/:id" element={<PracticeDetailPage />} />
           <Route path="/practice-session/:id" element={<PracticeSessionPage />} />
+          <Route path="/practice-complete" element={<PracticeCompletePage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/practice-review" element={<PracticeReviewPage />} />
           <Route path="/growth-map" element={<GrowthMapPage />} />

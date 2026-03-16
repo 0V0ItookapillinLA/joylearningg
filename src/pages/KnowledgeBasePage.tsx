@@ -95,7 +95,7 @@ const KnowledgeBasePage = () => {
           <Card
             key={item.id}
             className="flex gap-3 p-3 cursor-pointer hover:shadow-md transition-shadow"
-            onClick={() => navigate(`/course/${item.id}?type=${item.type === "video" ? "video" : "pdf"}`)}
+            onClick={() => navigate(item.type === "video" ? `/video/${item.id}` : `/doc/${item.id}`)}
           >
             <div className="relative h-20 w-28 shrink-0 rounded-xl overflow-hidden">
               <img src={item.cover} alt={item.title} className="h-full w-full object-cover" />
