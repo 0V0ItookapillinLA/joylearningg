@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, AlertCircle, Lightbulb, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
@@ -43,53 +43,53 @@ interface DialogueSegment {
 const dialogueSegments: DialogueSegment[] = [
   {
     messages: [
-      { role: "ai", text: "你好，我是客户王先生。你们的产品噪音太大了，我要退货！" },
-      { role: "user", text: "王先生您好，非常抱歉给您带来不好的体验。我理解您的心情。" },
-    ],
-    label: "excellent",
-    labelText: "表现优秀",
-  },
-  {
-    messages: [
-      { role: "user", text: "请问具体是在什么使用场景下出现的噪音呢？" },
-      { role: "ai", text: "就是晚上睡觉的时候，嗡嗡响根本没法睡！" },
-    ],
-    label: "excellent",
-    labelText: "表现优秀",
-  },
-  {
-    messages: [
-      { role: "user", text: "这个确实会影响您的休息。我建议您先试试调到静音模式。" },
-    ],
-    label: "improvable",
-    labelText: "可优化",
-    analysis: "直接给出建议而未确认客户是否了解静音模式操作，缺少引导性提问。",
-    suggestion: "建议先询问'您之前有试过静音模式吗？'，确认客户认知后再提供操作指导。",
-  },
-  {
-    messages: [
-      { role: "ai", text: "我试过了，没用！你们就是产品质量有问题！" },
-      { role: "user", text: "好的，那我帮您直接申请退货退款。" },
+      { role: "ai", text: "您好，我是来自XX公司的采购专员小王。请问您最近有考虑过扩大供货渠道吗？" },
+      { role: "user", text: "我们公司目前用的系统还行吧，暂时没有换的打算。" },
+      { role: "ai", text: "理解您的想法。不过我想了解一下，您目前的系统在处理大批量数据时，响应速度怎么样？" },
+      { role: "user", text: "这个我不太清楚，反正我们用着没什么问题。" },
     ],
     label: "error",
-    labelText: "错误",
-    analysis: "面对客户强烈不满时直接妥协退货，未尝试提供替代方案或升级处理。",
-    suggestion: "应先共情安抚，再提供多种解决方案（如换货、上门检测、补偿），避免第一时间同意退货。",
+    labelText: "需要改进",
+    analysis: "未能有效引导客户认识到现有系统的痛点，提问方式过于直接，容易让客户产生防御心理。",
+    suggestion: "建议采用SPIN法则，先通过情境性问题建立信任，再逐步引导客户发现问题：\"您平时处理订单高峰期的体验如何？有没有遇到过系统卡顿的情况？\"",
   },
   {
     messages: [
-      { role: "ai", text: "那你们多久能处理好？" },
-      { role: "user", text: "我们会在3个工作日内完成退款，届时会短信通知您。感谢您的反馈，我们会持续改进产品质量。" },
+      { role: "ai", text: "好的，那您方便告诉我，贵公司目前团队规模大概有多少人在使用这个系统呢？" },
+      { role: "user", text: "大概有50多人吧，但这个跟你们的产品有什么关系呢？" },
+      { role: "ai", text: "非常感谢您的信息。50人规模的团队，如果能提升10%的工作效率，一年能节省不少成本呢。" },
+      { role: "user", text: "你们的产品价格是多少？我先看看再说。" },
+    ],
+    label: "improvable",
+    labelText: "可以优化",
+    analysis: "能够提供基本信息并提出合理反问，但在价值讨论阶段过早转向价格，显得急躁。",
+    suggestion: "建议先了解更多价值信息：\"在讨论价格之前，我想先了解一下贵公司具体的需求点，这样才能给您推荐最合适的方案。\"",
+  },
+  {
+    messages: [
+      { role: "ai", text: "当然可以。不过在报价之前，我想先确认一下您最看重系统的哪些功能？" },
+      { role: "user", text: "主要是数据统计和报表生成的速度，还有就是多人协作的稳定性。" },
+      { role: "ai", text: "明白了。这两个恰好是我们产品的核心优势。我可以给您安排一次免费的系统演示。" },
+      { role: "user", text: "可以，你发个时间过来，我看看下周有没有空。" },
+    ],
+    label: "excellent",
+    labelText: "表现优秀",
+  },
+  {
+    messages: [
+      { role: "user", text: "对了，你们的售后服务怎么样？之前用的系统售后太差了。" },
+      { role: "ai", text: "我们提供7x24小时技术支持，还有专属客户经理一对一服务。" },
+      { role: "user", text: "听起来不错，那就先约个演示看看吧。" },
     ],
     label: "excellent",
     labelText: "表现优秀",
   },
 ];
 
-const labelStyles: Record<DialogueLabel, { border: string; bg: string; text: string; dot: string }> = {
-  excellent: { border: "border-green-300", bg: "bg-green-50", text: "text-green-700", dot: "bg-green-500" },
-  improvable: { border: "border-yellow-300", bg: "bg-yellow-50", text: "text-yellow-700", dot: "bg-yellow-500" },
-  error: { border: "border-red-300", bg: "bg-red-50", text: "text-red-700", dot: "bg-red-500" },
+const labelConfig: Record<DialogueLabel, { border: string; bg: string; text: string; icon: typeof AlertCircle; badgeBg: string; badgeText: string }> = {
+  error: { border: "border-l-red-500", bg: "bg-red-50", text: "text-red-600", icon: AlertCircle, badgeBg: "bg-red-100", badgeText: "text-red-600" },
+  improvable: { border: "border-l-yellow-500", bg: "bg-yellow-50", text: "text-yellow-600", icon: Lightbulb, badgeBg: "bg-yellow-100", badgeText: "text-yellow-600" },
+  excellent: { border: "border-l-green-500", bg: "bg-green-50", text: "text-green-600", icon: CheckCircle2, badgeBg: "bg-green-100", badgeText: "text-green-600" },
 };
 
 const evalText = [
@@ -112,12 +112,12 @@ const relatedCourses = [
 const strengths = [
   { name: "数据分析", score: 90, desc: "善于运用数据支撑论点" },
   { name: "沟通能力", score: 90, desc: "表达清晰，善于引导对话" },
-  { name: "沟通能力", score: 85, desc: "良好的倾听和回应技巧" },
+  { name: "团队合作", score: 85, desc: "良好的倾听和回应技巧" },
 ];
 
 const weaknesses = [
   { name: "抗压能力", score: 50, desc: "面对强势客户时容易妥协" },
-  { name: "沟通能力", score: 60, desc: "在压力下语言组织能力下降" },
+  { name: "责任心", score: 60, desc: "在压力下语言组织能力下降" },
 ];
 
 const PracticeReviewPage = () => {
@@ -126,9 +126,13 @@ const PracticeReviewPage = () => {
   const [expandedSegment, setExpandedSegment] = useState<number | null>(null);
   const selected = practiceList.find((p) => p.id === selectedId);
 
+  const errorCount = dialogueSegments.filter(s => s.label === "error").length;
+  const improvableCount = dialogueSegments.filter(s => s.label === "improvable").length;
+  const excellentCount = dialogueSegments.filter(s => s.label === "excellent").length;
+
   if (selected) {
     return (
-      <div>
+      <div className="min-h-screen bg-background">
         <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
           <button onClick={() => setSelectedId(null)}><ArrowLeft className="h-5 w-5" /></button>
           <h1 className="text-sm font-semibold">复盘报告</h1>
@@ -238,61 +242,87 @@ const PracticeReviewPage = () => {
             </div>
           </Card>
 
-          {/* Dialogue Review - redesigned */}
+          {/* Dialogue Review - matching screenshot style */}
           <Card className="p-4">
             <h3 className="text-xs font-bold flex items-center gap-1.5 mb-3">💬 会话记录分析</h3>
-            <div className="space-y-3">
+            
+            {/* Summary chips */}
+            <div className="flex gap-2 mb-4">
+              <span className="rounded-full border border-border px-3 py-1 text-[11px] font-medium">{errorCount} 处错误</span>
+              <span className="rounded-full border border-border px-3 py-1 text-[11px] font-medium">{improvableCount} 处可优化</span>
+              <span className="rounded-full border border-border px-3 py-1 text-[11px] font-medium">{excellentCount} 处表现良好</span>
+            </div>
+
+            <div className="space-y-4">
               {dialogueSegments.map((segment, si) => {
-                const style = labelStyles[segment.label];
+                const config = labelConfig[segment.label];
                 const isClickable = segment.label !== "excellent";
                 const isExpanded = expandedSegment === si;
+                const Icon = config.icon;
 
                 return (
                   <div key={si}>
+                    {/* Segment card with left border */}
                     <div
-                      className={`rounded-xl border-2 ${style.border} p-3 ${isClickable ? "cursor-pointer active:opacity-80" : ""}`}
+                      className={`rounded-xl border-l-4 ${config.border} bg-card shadow-sm p-4 ${isClickable ? "cursor-pointer" : ""}`}
                       onClick={() => {
                         if (isClickable) setExpandedSegment(isExpanded ? null : si);
                       }}
                     >
-                      {/* Label tag */}
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <span className={`h-2 w-2 rounded-full ${style.dot}`} />
-                        <span className={`text-[10px] font-semibold ${style.text}`}>{segment.labelText}</span>
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] text-muted-foreground font-medium">片段 {si + 1}</span>
+                          <span className={`inline-flex items-center gap-1 rounded-full ${config.badgeBg} px-2.5 py-0.5`}>
+                            <Icon className={`h-3 w-3 ${config.badgeText}`} />
+                            <span className={`text-[10px] font-semibold ${config.badgeText}`}>{segment.labelText}</span>
+                          </span>
+                        </div>
+                        {isClickable && (
+                          isExpanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        )}
                       </div>
-                      {/* Messages */}
-                      <div className="space-y-2">
+
+                      {/* Messages - flat style with role prefix */}
+                      <div className="space-y-3">
                         {segment.messages.map((msg, mi) => (
-                          <div key={mi} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                            <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${
-                              msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-                            }`}>
-                              {msg.text}
-                            </div>
+                          <div key={mi} className="flex gap-2.5">
+                            <span className={`text-[11px] font-bold shrink-0 mt-0.5 ${msg.role === "user" ? "text-primary" : "text-muted-foreground"}`}>
+                              {msg.role === "user" ? "我" : "AI"}
+                            </span>
+                            <p className="text-[12px] text-foreground/80 leading-relaxed">{msg.text}</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* Expandable analysis */}
+                    {/* Expandable analysis below the card */}
                     <AnimatePresence>
                       {isExpanded && segment.analysis && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
+                          transition={{ duration: 0.25 }}
                           className="overflow-hidden"
                         >
-                          <div className={`mt-1 rounded-lg ${style.bg} p-3 space-y-2`}>
-                            <div>
-                              <p className={`text-[10px] font-semibold ${style.text} mb-0.5`}>问题分析</p>
-                              <p className="text-[11px] text-foreground">{segment.analysis}</p>
+                          <div className="mt-2 space-y-2 pl-2">
+                            {/* Problem analysis */}
+                            <div className="rounded-xl bg-red-50 border border-red-100 p-3.5">
+                              <div className="flex items-center gap-1.5 mb-1.5">
+                                <AlertCircle className="h-3.5 w-3.5 text-red-500" />
+                                <span className="text-[11px] font-semibold text-red-600">问题分析</span>
+                              </div>
+                              <p className="text-[12px] text-foreground/80 leading-relaxed">{segment.analysis}</p>
                             </div>
+                            {/* Suggestion */}
                             {segment.suggestion && (
-                              <div>
-                                <p className={`text-[10px] font-semibold ${style.text} mb-0.5`}>改进建议</p>
-                                <p className="text-[11px] text-foreground">{segment.suggestion}</p>
+                              <div className="rounded-xl bg-blue-50 border border-blue-100 p-3.5">
+                                <div className="flex items-center gap-1.5 mb-1.5">
+                                  <Lightbulb className="h-3.5 w-3.5 text-blue-500" />
+                                  <span className="text-[11px] font-semibold text-blue-600">改进建议</span>
+                                </div>
+                                <p className="text-[12px] text-foreground/80 leading-relaxed">{segment.suggestion}</p>
                               </div>
                             )}
                           </div>

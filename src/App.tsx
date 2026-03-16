@@ -22,7 +22,6 @@ import PlanDetailPage from "@/pages/PlanDetailPage";
 import PracticeDetailPage from "@/pages/PracticeDetailPage";
 import PracticeSessionPage from "@/pages/PracticeSessionPage";
 import CourseDetailPage from "@/pages/CourseDetailPage";
-import CourseLibraryPage from "@/pages/CourseLibraryPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
 import NotFound from "@/pages/NotFound";
 
@@ -44,7 +43,7 @@ const App = () => (
           <Route path="/fragment-learn" element={<FragmentLearnPage />} />
           <Route path="/chapter/:id" element={<ChapterDetailPage />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
-          <Route path="/course-library" element={<CourseLibraryPage />} />
+          <Route path="/course-library" element={<KnowledgeBasePage />} />
           <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
           <Route path="/practice" element={<AIPracticePage />} />
           <Route path="/practice-detail/:id" element={<PracticeDetailPage />} />

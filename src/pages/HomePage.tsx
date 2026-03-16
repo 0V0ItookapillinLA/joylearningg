@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Play, BookOpen, Target, Brain, Library, ChevronRight, Star, Users, Video, FileText, Trophy } from "lucide-react";
+import { Search, Bell, Play, Library, Target, Brain, ChevronRight, Star, Users, Trophy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -10,6 +10,10 @@ import roleCustomerService from "@/assets/role-customer-service.png";
 import roleSalesManager from "@/assets/role-sales-manager.png";
 import roleAngryCustomer from "@/assets/role-angry-customer.png";
 import roleNegotiator from "@/assets/role-negotiator.png";
+import coverObjection from "@/assets/cover-objection.jpg";
+import coverPhoneSales from "@/assets/cover-phone-sales.jpg";
+import coverProduct from "@/assets/cover-product.jpg";
+import coverNegotiation from "@/assets/cover-negotiation.jpg";
 
 const banners = [
   { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1 },
@@ -18,18 +22,17 @@ const banners = [
 ];
 
 const quickActions = [
-  { icon: BookOpen, label: "课程库", path: "/course-library" },
+  { icon: Library, label: "知识库", path: "/knowledge-base" },
   { icon: Target, label: "AI对练", path: "/practice" },
   { icon: Brain, label: "考试中心", path: "/exam" },
-  { icon: Library, label: "知识库", path: "/knowledge-base" },
   { icon: Trophy, label: "排行榜", path: "/community?tab=leaderboard" },
 ];
 
 const courses = [
-  { id: 1, title: "客户异议处理技巧", type: "video", learners: 2341, rating: 4.8, chapters: 12 },
-  { id: 2, title: "电话销售开场白训练", type: "video", learners: 1856, rating: 4.9, chapters: 8 },
-  { id: 3, title: "产品卖点提炼方法论", type: "pdf", learners: 1203, rating: 4.7, chapters: 10 },
-  { id: 4, title: "高效谈判策略", type: "pdf", learners: 987, rating: 4.6, chapters: 15 },
+  { id: 1, title: "客户异议处理技巧", type: "video", learners: 2341, rating: 4.8, cover: coverObjection },
+  { id: 2, title: "电话销售开场白训练", type: "video", learners: 1856, rating: 4.9, cover: coverPhoneSales },
+  { id: 3, title: "产品卖点提炼方法论", type: "pdf", learners: 1203, rating: 4.7, cover: coverProduct },
+  { id: 4, title: "高效谈判策略", type: "pdf", learners: 987, rating: 4.6, cover: coverNegotiation },
 ];
 
 const practices = [
@@ -105,7 +108,7 @@ const HomePage = () => {
       </motion.div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-5 gap-2 px-4">
+      <div className="grid grid-cols-4 gap-2 px-4">
         {quickActions.map((action) => (
           <button key={action.label} onClick={() => navigate(action.path)} className="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-colors hover:bg-muted">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
@@ -120,7 +123,7 @@ const HomePage = () => {
       <div className="px-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">推荐课程</h3>
-          <button className="text-xs text-primary" onClick={() => navigate("/course-library")}>更多</button>
+          <button className="text-xs text-primary" onClick={() => navigate("/knowledge-base")}>更多</button>
         </div>
         <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
           {courses.map((course) => (
@@ -129,8 +132,15 @@ const HomePage = () => {
               className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
               onClick={() => navigate(`/course/${course.id}?type=${course.type}`)}
             >
-              <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/10 to-accent">
-                {course.type === "video" ? <Video className="h-8 w-8 text-primary/40" /> : <FileText className="h-8 w-8 text-primary/40" />}
+              <div className="relative h-24 overflow-hidden">
+                <img src={course.cover} alt={course.title} className="h-full w-full object-cover" />
+                {course.type === "video" && (
+                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/80">
+                      <Play className="h-3.5 w-3.5 text-primary ml-0.5" />
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-3">
                 <div className="mb-1">
