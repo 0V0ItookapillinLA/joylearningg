@@ -22,8 +22,8 @@ import PlanDetailPage from "@/pages/PlanDetailPage";
 import PracticeDetailPage from "@/pages/PracticeDetailPage";
 import PracticeSessionPage from "@/pages/PracticeSessionPage";
 import CourseDetailPage from "@/pages/CourseDetailPage";
-import CourseLibraryPage from "@/pages/CourseLibraryPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
+import NotFound from "@/pages/NotFound";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
