@@ -1,4 +1,4 @@
-import { ChevronRight, BarChart3, History, Map, Compass, Target } from "lucide-react";
+import { ChevronRight, BarChart3, History, Map, Compass } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 

@@ -24,7 +24,6 @@ import PracticeSessionPage from "@/pages/PracticeSessionPage";
 import CourseDetailPage from "@/pages/CourseDetailPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
 import NotFound from "@/pages/NotFound";
-import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
