@@ -1,4 +1,4 @@
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -173,7 +173,7 @@ const GrowthMapPage = () => {
                           <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-semibold text-green-600">已达成</span>
                         )}
                       </div>
-                      {!isLocked && <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
+                      {/* No chevron - cards have no drill-down */}
                     </div>
 
                     <div className="space-y-2">
