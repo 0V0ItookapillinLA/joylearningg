@@ -15,6 +15,8 @@ import ExamPage from "@/pages/ExamPage";
 import PracticeReviewPage from "@/pages/PracticeReviewPage";
 import GrowthMapPage from "@/pages/GrowthMapPage";
 import CompetencyPage from "@/pages/CompetencyPage";
+import SharedPracticeDetailPage from "@/pages/SharedPracticeDetailPage";
+import PlanDetailPage from "@/pages/PlanDetailPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +41,8 @@ const App = () => (
           <Route path="/practice-review" element={<PracticeReviewPage />} />
           <Route path="/growth-map" element={<GrowthMapPage />} />
           <Route path="/competency" element={<CompetencyPage />} />
+          <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
+          <Route path="/plan/:id" element={<PlanDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -1,37 +1,60 @@
-import { Search, Bell, Play, BookOpen, Target, Brain, Trophy, Library, ChevronRight, Star, Users } from "lucide-react";
+import { useState } from "react";
+import { Search, Bell, Play, BookOpen, Target, Brain, Trophy, Library, ChevronRight, Star, Users, MessageSquare, FileText, Video } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import banner1 from "@/assets/banner1.jpg";
+import banner2 from "@/assets/banner2.jpg";
+import banner3 from "@/assets/banner3.jpg";
+import roleCustomerService from "@/assets/role-customer-service.png";
+import roleSalesManager from "@/assets/role-sales-manager.png";
+import roleAngryCustomer from "@/assets/role-angry-customer.png";
+import roleNegotiator from "@/assets/role-negotiator.png";
 
 const banners = [
-  { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", color: "from-primary/80 to-primary" },
-  { id: 2, title: "客户服务金牌话术", subtitle: "30天打卡挑战赛", color: "from-blue-400 to-cyan-400" },
-  { id: 3, title: "新人入职必修课", subtitle: "系统化学习路径", color: "from-indigo-400 to-primary" },
+  { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1 },
+  { id: 2, title: "客户服务金牌话术", subtitle: "30天打卡挑战赛", image: banner2 },
+  { id: 3, title: "新人入职必修课", subtitle: "系统化学习路径", image: banner3 },
 ];
 
 const quickActions = [
   { icon: BookOpen, label: "课程库", path: "/learn" },
   { icon: Target, label: "AI对练", path: "/practice" },
-  { icon: Brain, label: "考试中心", path: "/learn" },
+  { icon: Brain, label: "考试中心", path: "/exam" },
   { icon: Library, label: "知识库", path: "/learn" },
   { icon: Trophy, label: "排行榜", path: "/community" },
 ];
 
 const courses = [
-  { id: 1, title: "客户异议处理技巧", learners: 2341, rating: 4.8, chapters: 12 },
-  { id: 2, title: "电话销售开场白训练", learners: 1856, rating: 4.9, chapters: 8 },
-  { id: 3, title: "产品卖点提炼方法论", learners: 1203, rating: 4.7, chapters: 10 },
-  { id: 4, title: "高效谈判策略", learners: 987, rating: 4.6, chapters: 15 },
+  { id: 1, title: "客户异议处理技巧", type: "video", learners: 2341, rating: 4.8, chapters: 12 },
+  { id: 2, title: "电话销售开场白训练", type: "video", learners: 1856, rating: 4.9, chapters: 8 },
+  { id: 3, title: "产品卖点提炼方法论", type: "pdf", learners: 1203, rating: 4.7, chapters: 10 },
+  { id: 4, title: "高效谈判策略", type: "pdf", learners: 987, rating: 4.6, chapters: 15 },
+];
+
+const practices = [
+  { id: 1, title: "客户投诉处理", tags: ["自由对话", "文本对练"], difficulty: "中级", times: 1234 },
+  { id: 2, title: "首次电话沟通", tags: ["固定剧本", "文本对练"], difficulty: "初级", times: 892 },
+  { id: 3, title: "价格谈判实战", tags: ["自由对话"], difficulty: "高级", times: 567 },
+  { id: 4, title: "产品演示模拟", tags: ["固定剧本", "自由对话"], difficulty: "中级", times: 345 },
+];
+
+const roles = [
+  { id: 1, name: "客服小美", desc: "耐心温柔的客服代表", avatar: roleCustomerService, tag: "客户服务" },
+  { id: 2, name: "销售经理张总", desc: "经验丰富的销售导师", avatar: roleSalesManager, tag: "销售培训" },
+  { id: 3, name: "难缠客户王先生", desc: "挑剔易怒的投诉客户", avatar: roleAngryCustomer, tag: "投诉处理" },
+  { id: 4, name: "谈判专家李总", desc: "精明的商务谈判对手", avatar: roleNegotiator, tag: "商务谈判" },
 ];
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [bannerIdx, setBannerIdx] = useState(0);
+  const [activeTab, setActiveTab] = useState<"course" | "practice">("course");
 
   return (
-    <div className="space-y-5 px-4 pb-4">
+    <div className="space-y-5 pb-4">
       {/* Header */}
-      <div className="flex items-center gap-3 pt-4">
+      <div className="flex items-center gap-3 px-4 pt-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -45,31 +68,35 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* Banner */}
-      <div className="relative overflow-hidden rounded-2xl">
+      {/* Banner with real images */}
+      <div className="relative mx-4 overflow-hidden rounded-2xl">
         <motion.div
-          className={`flex h-36 flex-col justify-center bg-gradient-to-r ${banners[bannerIdx].color} px-6 text-primary-foreground`}
           key={bannerIdx}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
+          className="relative h-36"
         >
-          <h2 className="text-lg font-bold">{banners[bannerIdx].title}</h2>
-          <p className="mt-1 text-xs opacity-90">{banners[bannerIdx].subtitle}</p>
+          <img src={banners[bannerIdx].image} alt={banners[bannerIdx].title} className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
+          <div className="absolute bottom-4 left-5">
+            <h2 className="text-base font-bold text-white">{banners[bannerIdx].title}</h2>
+            <p className="mt-0.5 text-[11px] text-white/80">{banners[bannerIdx].subtitle}</p>
+          </div>
         </motion.div>
-        <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
+        <div className="absolute bottom-2 right-3 flex gap-1.5">
           {banners.map((_, i) => (
             <button
               key={i}
               onClick={() => setBannerIdx(i)}
-              className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-primary-foreground" : "w-1.5 bg-primary-foreground/50"}`}
+              className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`}
             />
           ))}
         </div>
       </div>
 
       {/* Fragment Learning Entry */}
-      <motion.div whileTap={{ scale: 0.98 }}>
+      <motion.div whileTap={{ scale: 0.98 }} className="px-4">
         <Card
           className="flex cursor-pointer items-center gap-4 border-primary/20 bg-gradient-to-r from-accent to-card p-4"
           onClick={() => navigate("/fragment-learn")}
@@ -86,7 +113,7 @@ const HomePage = () => {
       </motion.div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-2 px-4">
         {quickActions.map((action) => (
           <button
             key={action.label}
@@ -101,46 +128,119 @@ const HomePage = () => {
         ))}
       </div>
 
-      {/* Recommended Courses */}
-      <div>
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold">推荐课程</h3>
-          <button className="text-xs text-primary" onClick={() => navigate("/learn")}>
-            查看全部
+      {/* Course & Practice Tabs */}
+      <div className="px-4">
+        <div className="mb-3 flex items-center gap-4 border-b border-border">
+          <button
+            onClick={() => setActiveTab("course")}
+            className={`pb-2 text-sm font-semibold transition-colors ${activeTab === "course" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+          >
+            推荐课程
+          </button>
+          <button
+            onClick={() => setActiveTab("practice")}
+            className={`pb-2 text-sm font-semibold transition-colors ${activeTab === "practice" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
+          >
+            推荐练习
           </button>
         </div>
-        <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4">
-          {courses.map((course) => (
-            <Card
-              key={course.id}
-              className="w-40 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
-              onClick={() => navigate(`/chapter/${course.id}`)}
-            >
-              <div className="h-20 bg-gradient-to-br from-primary/20 to-accent flex items-center justify-center">
-                <BookOpen className="h-8 w-8 text-primary/40" />
-              </div>
-              <div className="p-3">
-                <h4 className="text-xs font-medium leading-tight line-clamp-2">{course.title}</h4>
-                <div className="mt-2 flex items-center gap-2 text-[10px] text-muted-foreground">
-                  <span className="flex items-center gap-0.5">
-                    <Users className="h-3 w-3" />
-                    {course.learners}
-                  </span>
-                  <span className="flex items-center gap-0.5">
-                    <Star className="h-3 w-3 fill-warning text-warning" />
-                    {course.rating}
-                  </span>
+
+        {activeTab === "course" && (
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
+            {courses.map((course) => (
+              <Card
+                key={course.id}
+                className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
+                onClick={() => navigate(`/chapter/${course.id}`)}
+              >
+                <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/10 to-accent">
+                  {course.type === "video" ? (
+                    <Video className="h-8 w-8 text-primary/40" />
+                  ) : (
+                    <FileText className="h-8 w-8 text-primary/40" />
+                  )}
                 </div>
-              </div>
-            </Card>
+                <div className="p-3">
+                  <div className="mb-1">
+                    <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-medium ${course.type === "video" ? "bg-primary/10 text-primary" : "bg-accent text-accent-foreground"}`}>
+                      {course.type === "video" ? "视频课程" : "PDF资料"}
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-medium leading-tight line-clamp-2">{course.title}</h4>
+                  <div className="mt-2 flex items-center gap-2 text-[10px] text-muted-foreground">
+                    <span className="flex items-center gap-0.5">
+                      <Users className="h-3 w-3" />{course.learners}
+                    </span>
+                    <span className="flex items-center gap-0.5">
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />{course.rating}
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "practice" && (
+          <div className="space-y-2">
+            {practices.map((p) => (
+              <Card
+                key={p.id}
+                className="cursor-pointer p-3 transition-shadow hover:shadow-md"
+                onClick={() => navigate("/practice")}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-medium">{p.title}</h4>
+                      <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-medium ${
+                        p.difficulty === "初级" ? "bg-green-50 text-green-600" :
+                        p.difficulty === "中级" ? "bg-yellow-50 text-yellow-600" :
+                        "bg-red-50 text-red-600"
+                      }`}>{p.difficulty}</span>
+                    </div>
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {p.tags.map((tag) => (
+                        <span key={tag} className="rounded bg-accent px-1.5 py-0.5 text-[10px] text-accent-foreground">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] text-muted-foreground">{p.times}人已练</span>
+                    <ChevronRight className="ml-1 inline h-3.5 w-3.5 text-muted-foreground" />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Role Recommendations */}
+      <div className="px-4">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold">AI陪练角色</h3>
+          <button className="text-xs text-primary" onClick={() => navigate("/practice")}>更多</button>
+        </div>
+        <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
+          {roles.map((role) => (
+            <div
+              key={role.id}
+              className="flex w-28 shrink-0 cursor-pointer flex-col items-center rounded-2xl bg-card p-3 shadow-sm border border-border transition-shadow hover:shadow-md"
+              onClick={() => navigate("/practice")}
+            >
+              <img src={role.avatar} alt={role.name} className="h-14 w-14 rounded-full object-cover bg-accent" />
+              <h4 className="mt-2 text-xs font-medium text-center leading-tight">{role.name}</h4>
+              <span className="mt-1 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] text-primary">{role.tag}</span>
+              <p className="mt-1 text-[10px] text-muted-foreground text-center line-clamp-1">{role.desc}</p>
+            </div>
           ))}
         </div>
       </div>
     </div>
   );
 };
-
-// Need useState import
-import { useState } from "react";
 
 export default HomePage;
