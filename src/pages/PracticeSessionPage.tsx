@@ -55,7 +55,7 @@ const PracticeSessionPage = () => {
 
   const handleEnd = () => {
     setShowEndDialog(false);
-    navigate("/practice-review");
+    navigate("/practice-complete");
   };
 
   // Guide bottom sheet
