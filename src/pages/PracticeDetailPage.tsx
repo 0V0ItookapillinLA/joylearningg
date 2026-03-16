@@ -154,9 +154,9 @@ const PracticeDetailPage = () => {
         </div>
       </div>
 
-      {/* Sticky bottom buttons */}
-      <div className="sticky bottom-0 z-10 bg-card border-t border-border px-4 py-3 flex gap-3">
-        <Button variant="outline" className="flex-1 rounded-xl h-11 text-xs" onClick={() => navigate(-1)}>
+      {/* Fixed bottom buttons */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 mx-auto max-w-[430px] bg-card border-t border-border px-4 py-3 flex gap-3">
+        <Button variant="outline" className="flex-1 rounded-xl h-11 text-xs" onClick={() => setShowGuide(true)}>
           练前指导
         </Button>
         <Button className="flex-1 rounded-xl h-11 text-xs" onClick={() => navigate(getModeRoute())}>
