@@ -87,19 +87,19 @@ const PracticeSessionPage = () => {
     </AnimatePresence>
   );
 
-  // Hint center popup
+  // Hint center popup — centered within mobile container
   const HintPopup = () => (
     <AnimatePresence>
       {showHint && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-foreground/20"
+            className="absolute inset-0 z-[60] bg-foreground/20"
             onClick={() => setShowHint(false)}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed left-1/2 top-1/2 z-[70] w-[85%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-5 shadow-2xl"
+            className="absolute left-1/2 top-1/2 z-[70] w-[85%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-5 shadow-2xl"
           >
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="h-5 w-5 text-yellow-500" />
