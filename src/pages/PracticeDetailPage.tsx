@@ -168,6 +168,33 @@ const PracticeDetailPage = () => {
           进入场景练习
         </Button>
       </div>
+
+      {/* Guide bottom sheet */}
+      <AnimatePresence>
+        {showGuide && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+              onClick={() => setShowGuide(false)}
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
+              style={{ maxHeight: "60vh" }}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h3 className="text-sm font-semibold">练前指导</h3>
+                <button onClick={() => setShowGuide(false)}><X className="h-5 w-5 text-muted-foreground" /></button>
+              </div>
+              <div className="overflow-y-auto p-4" style={{ maxHeight: "calc(60vh - 56px)" }}>
+                <p className="text-xs leading-relaxed text-foreground whitespace-pre-line">{guideContent}</p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
