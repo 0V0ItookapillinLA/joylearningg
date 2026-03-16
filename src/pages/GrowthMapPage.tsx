@@ -1,6 +1,5 @@
 import { ArrowLeft, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,111 +69,160 @@ const levels: Level[] = [
 
 const currentIndex = levels.findIndex((l) => l.status === "current");
 
+// Island path positions (zigzag pattern)
+const nodePositions = [
+  { left: "20%", align: "left" },
+  { left: "55%", align: "right" },
+  { left: "15%", align: "left" },
+  { left: "60%", align: "right" },
+  { left: "25%", align: "left" },
+];
+
 const GrowthMapPage = () => {
   const navigate = useNavigate();
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
-        <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
-        <h1 className="text-sm font-semibold">成长地图</h1>
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: "linear-gradient(180deg, hsl(199 89% 70%) 0%, hsl(199 89% 60%) 30%, hsl(45 80% 75%) 70%, hsl(45 60% 65%) 100%)"
+    }}>
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-md">
+        <button onClick={() => navigate(-1)} className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+          <ArrowLeft className="h-5 w-5 text-white" />
+        </button>
+        <h1 className="text-sm font-semibold text-white">成长地图</h1>
       </div>
 
-      <div className="p-4">
-        <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground text-lg font-black">
+      {/* Current progress card */}
+      <div className="px-4 pt-2 pb-4">
+        <div className="rounded-2xl bg-white/90 backdrop-blur-sm p-4 shadow-lg">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-black shadow-md">
               {levels[currentIndex].level}
             </div>
             <div>
-              <h3 className="text-sm font-bold">{levels[currentIndex].title}</h3>
-              <p className="text-[10px] text-muted-foreground">当前职级 · 晋升进度 45%</p>
+              <h3 className="text-sm font-bold text-foreground">{levels[currentIndex].title}</h3>
+              <p className="text-[10px] text-muted-foreground">晋升进度 45%</p>
             </div>
           </div>
           <Progress value={45} className="h-2" />
-        </Card>
-      </div>
-
-      <div className="px-4 pb-8">
-        <div className="relative pl-8">
-          <div className="absolute left-[15px] top-0 bottom-0 w-0.5 bg-border" />
-          <div className="space-y-4">
-            {levels.map((level) => {
-              const isCompleted = level.status === "completed";
-              const isCurrent = level.status === "current";
-              const isLocked = level.status === "locked";
-
-              return (
-                <div key={level.level} className="relative">
-                  <div className={`absolute -left-8 top-3 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold border-2 ${
-                    isCompleted ? "bg-green-500 border-green-500 text-white" :
-                    isCurrent ? "bg-primary border-primary text-primary-foreground animate-pulse" :
-                    "bg-muted border-border text-muted-foreground"
-                  }`}>
-                    {level.level}
-                  </div>
-
-                  <Card
-                    className={`p-3.5 transition-all cursor-pointer ${isLocked ? "opacity-40" : ""} ${isCurrent ? "border-primary/40 shadow-md" : ""}`}
-                    onClick={() => !isLocked && setSelectedLevel(level)}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-bold">{level.title}</h4>
-                        {isCurrent && (
-                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[8px] font-semibold text-primary">当前</span>
-                        )}
-                        {isCompleted && (
-                          <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-semibold text-green-600">已达成</span>
-                        )}
-                      </div>
-                      {!isLocked && (
-                        <span className="text-[9px] text-primary font-medium">查看评估 →</span>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <div>
-                        <p className="text-[9px] font-semibold text-primary mb-1">专业能力</p>
-                        <div className="flex flex-wrap gap-1">
-                          {level.professional.map((s) => (
-                            <span key={s} className="rounded-md bg-primary/8 px-1.5 py-0.5 text-[8px] text-primary font-medium">{s}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-[9px] font-semibold text-muted-foreground mb-1">通用能力</p>
-                        <div className="flex flex-wrap gap-1">
-                          {level.general.map((s) => (
-                            <span key={s} className="rounded-md bg-muted px-1.5 py-0.5 text-[8px] text-muted-foreground">{s}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
+
+      {/* Map area with nodes */}
+      <div className="relative px-4 pb-20" style={{ minHeight: levels.length * 160 }}>
+        {/* Winding path SVG */}
+        <svg className="absolute inset-0 w-full h-full" style={{ minHeight: levels.length * 160 }}>
+          <defs>
+            <linearGradient id="pathGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.6)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0.2)" />
+            </linearGradient>
+          </defs>
+          {levels.map((_, i) => {
+            if (i === levels.length - 1) return null;
+            const y1 = i * 160 + 80;
+            const y2 = (i + 1) * 160 + 80;
+            const x1 = nodePositions[i % nodePositions.length].align === "left" ? 100 : 250;
+            const x2 = nodePositions[(i + 1) % nodePositions.length].align === "left" ? 100 : 250;
+            const midY = (y1 + y2) / 2;
+            return (
+              <path
+                key={i}
+                d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
+                fill="none"
+                stroke="url(#pathGrad)"
+                strokeWidth="4"
+                strokeDasharray={levels[i + 1].status === "locked" ? "8 8" : "none"}
+              />
+            );
+          })}
+        </svg>
+
+        {/* Nodes */}
+        {levels.map((level, i) => {
+          const isCompleted = level.status === "completed";
+          const isCurrent = level.status === "current";
+          const isLocked = level.status === "locked";
+          const pos = nodePositions[i % nodePositions.length];
+
+          return (
+            <motion.div
+              key={level.level}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="relative"
+              style={{ height: 160, paddingTop: 30 }}
+            >
+              <div
+                className={`absolute cursor-pointer transition-transform hover:scale-105 ${isLocked ? "opacity-50" : ""}`}
+                style={{ left: pos.left, transform: "translateX(-50%)" }}
+                onClick={() => !isLocked && setSelectedLevel(level)}
+              >
+                {/* Node circle */}
+                <div className={`relative flex h-16 w-16 items-center justify-center rounded-full shadow-xl border-4 ${
+                  isCompleted ? "bg-gradient-to-br from-green-400 to-green-600 border-green-300" :
+                  isCurrent ? "bg-gradient-to-br from-primary to-blue-600 border-blue-300" :
+                  "bg-gradient-to-br from-gray-300 to-gray-400 border-gray-200"
+                }`}>
+                  <span className="text-white font-black text-sm">{level.level}</span>
+                  {isCompleted && (
+                    <div className="absolute -top-2 -right-2 flex items-center justify-center">
+                      <span className="text-lg">⭐</span>
+                    </div>
+                  )}
+                  {isCurrent && (
+                    <motion.div
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="absolute -inset-2 rounded-full border-2 border-primary/40"
+                    />
+                  )}
+                </div>
+
+                {/* Label card */}
+                <div className={`mt-2 rounded-xl px-3 py-2 shadow-md min-w-[120px] text-center ${
+                  isCompleted ? "bg-green-50 border border-green-200" :
+                  isCurrent ? "bg-white border border-primary/30" :
+                  "bg-white/60 border border-gray-200"
+                }`}>
+                  <p className="text-xs font-bold text-foreground">{level.title}</p>
+                  {isCurrent && (
+                    <div className="mt-1">
+                      <Progress value={45} className="h-1" />
+                      <p className="text-[9px] text-primary mt-0.5">45%</p>
+                    </div>
+                  )}
+                  {isCompleted && (
+                    <p className="text-[9px] text-green-600 font-medium mt-0.5">✅ 已通关</p>
+                  )}
+                  {isLocked && (
+                    <p className="text-[9px] text-muted-foreground mt-0.5">🔒 未解锁</p>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Decorative elements */}
+      <div className="fixed bottom-4 right-4 text-2xl opacity-60">🌴</div>
+      <div className="fixed bottom-20 left-2 text-xl opacity-40">🌊</div>
 
       {/* Competency Modal */}
       <AnimatePresence>
         {selectedLevel && (
           <>
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
               onClick={() => setSelectedLevel(null)}
             />
             <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl overflow-hidden"
               style={{ maxHeight: "80vh" }}
@@ -187,7 +235,6 @@ const GrowthMapPage = () => {
               </div>
 
               <div className="overflow-y-auto p-4 space-y-4" style={{ maxHeight: "calc(80vh - 56px)" }}>
-                {/* Overall score */}
                 <div className="text-center">
                   <div className="inline-flex h-20 w-20 items-center justify-center rounded-full border-4 border-primary/20 mb-2">
                     <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
@@ -201,7 +248,6 @@ const GrowthMapPage = () => {
                   <p className="text-xs font-semibold">综合胜任力评分</p>
                 </div>
 
-                {/* Radar */}
                 <ResponsiveContainer width="100%" height={200}>
                   <RadarChart data={selectedLevel.competency.map(c => ({ skill: c.name, current: c.score, target: c.target }))}>
                     <PolarGrid stroke="hsl(var(--border))" />
@@ -215,7 +261,6 @@ const GrowthMapPage = () => {
                   <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-muted-foreground" />目标水平</span>
                 </div>
 
-                {/* Dimension bars */}
                 <div className="space-y-3">
                   {selectedLevel.competency.map((d) => (
                     <div key={d.name}>
@@ -226,6 +271,26 @@ const GrowthMapPage = () => {
                       <Progress value={d.target > 0 ? (d.score / d.target) * 100 : 0} className="h-2" />
                     </div>
                   ))}
+                </div>
+
+                {/* Skills section */}
+                <div className="space-y-3 pt-2">
+                  <div>
+                    <p className="text-[10px] font-semibold text-primary mb-1.5">专业能力</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedLevel.professional.map((s) => (
+                        <span key={s} className="rounded-lg bg-primary/8 px-2 py-1 text-[10px] text-primary font-medium">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold text-muted-foreground mb-1.5">通用能力</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedLevel.general.map((s) => (
+                        <span key={s} className="rounded-lg bg-muted px-2 py-1 text-[10px] text-muted-foreground">{s}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
