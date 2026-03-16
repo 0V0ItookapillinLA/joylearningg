@@ -49,10 +49,25 @@ const PracticeSessionPage = () => {
   const role = roleInfo[id || "1"] || roleInfo["1"];
   const isVideoMode = mode === "video";
 
-  const actInfo: Record<number, { title: string; points: string[] }> = {
-    1: { title: "第一幕：安抚情绪", points: ["表达对客户的理解和关心", "使用共情话术缓解对方情绪", "避免争论对错"] },
-    2: { title: "第二幕：了解问题", points: ["通过提问了解事情经过", "确认问题的具体细节", "让客户感到被重视"] },
-    3: { title: "第三幕：提供方案", points: ["给出具体的解决方案", "征求客户的意见", "确认客户是否满意"] },
+  const actInfo: Record<number, { title: string; step: string; intro: string; goal: string }> = {
+    1: {
+      title: "第一幕",
+      step: "1/3",
+      intro: "先稳定对方情绪，建立继续沟通的意愿，避免一开始就争论责任归属。",
+      goal: "让对方愿意继续说明问题，并确认当前最核心的不满点。",
+    },
+    2: {
+      title: "第二幕",
+      step: "2/3",
+      intro: "围绕问题细节进行追问，确认背景、经过和影响，体现你在认真处理。",
+      goal: "把问题关键信息问清楚，让对方感受到被重视和被理解。",
+    },
+    3: {
+      title: "第三幕",
+      step: "3/3",
+      intro: "给出明确可执行的解决方案，并与对方确认接受条件与后续安排。",
+      goal: "推动对方接受解决方案，并完成本轮沟通收口。",
+    },
   };
 
   const sendMessage = () => {

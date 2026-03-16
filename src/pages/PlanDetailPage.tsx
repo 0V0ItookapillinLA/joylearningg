@@ -20,7 +20,7 @@ const planData = {
       items: [
         { id: 1, title: "越是艰苦的环节，越需要保持状态", type: "video", status: "completed", duration: "至少学习8分钟" },
         { id: 2, title: "项目管理知识手册", type: "doc", status: "completed", duration: "阅读约10分钟" },
-        { id: 3, title: "十大领域与六重约束", type: "practice", tag: "自由对话", status: "in_progress", duration: "需学习" },
+        { id: 3, targetId: 1, title: "客户投诉处理", type: "practice", tag: "自由对话", status: "in_progress", duration: "需学习" },
       ],
     },
     {
@@ -29,7 +29,7 @@ const planData = {
       expanded: true,
       items: [
         { id: 4, title: "重新梳理自己的任务", type: "video", status: "not_started", duration: "至少学习10分钟" },
-        { id: 5, title: "如何高效沟通", type: "practice", tag: "固定剧本", status: "not_started", duration: "需学习" },
+        { id: 5, targetId: 2, title: "首次电话沟通", type: "practice", tag: "固定剧本", status: "not_started", duration: "需学习" },
         { id: 6, title: "团队协作方法论", type: "doc", status: "not_started", duration: "阅读约15分钟" },
       ],
     },
@@ -38,10 +38,10 @@ const planData = {
       title: "第三阶段 实战演练",
       expanded: false,
       items: [
-        { id: 7, title: "模拟客户沟通场景", type: "practice", tag: "文本对练", status: "not_started", duration: "需完成对练" },
+        { id: 7, targetId: 3, title: "价格谈判实战", type: "practice", tag: "文本对练", status: "not_started", duration: "需完成对练" },
         { id: 8, title: "产品介绍实操", type: "video", status: "not_started", duration: "至少学习15分钟" },
         { id: 9, title: "异议处理指南", type: "doc", status: "not_started", duration: "阅读约20分钟" },
-        { id: 10, title: "综合考核对练", type: "practice", tag: "自由对话", status: "not_started", duration: "必须通过" },
+        { id: 10, targetId: 4, title: "产品演示模拟", type: "practice", tag: "自由对话", status: "not_started", duration: "必须通过" },
       ],
     },
   ],
