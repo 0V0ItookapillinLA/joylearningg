@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Crown, TrendingUp, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import {

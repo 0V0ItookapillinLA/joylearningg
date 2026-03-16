@@ -64,7 +64,7 @@ const dialogueSegments: DialogueSegment[] = [
     label: "improvable",
     labelText: "可优化",
     analysis: "直接给出建议而未确认客户是否了解静音模式操作，缺少引导性提问。",
-    suggestion: "建议先询问"您之前有试过静音模式吗？"，确认客户认知后再提供操作指导。",
+    suggestion: "建议先询问'您之前有试过静音模式吗？'，确认客户认知后再提供操作指导。",
   },
   {
     messages: [
