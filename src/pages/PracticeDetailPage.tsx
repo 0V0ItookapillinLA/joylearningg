@@ -79,8 +79,9 @@ const PracticeDetailPage = () => {
   const practice = practiceData[id || "1"] || practiceData["1"];
 
   const getModeRoute = () => {
+    const isScript = practice.tag === "固定剧本";
     if (practice.tag === "文本对练") return `/practice-session/${id}?mode=text`;
-    return `/practice-session/${id}?mode=video`;
+    return `/practice-session/${id}?mode=video${isScript ? "&script=true" : ""}`;
   };
 
   return (
