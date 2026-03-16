@@ -14,6 +14,10 @@ import coverObjection from "@/assets/cover-objection.jpg";
 import coverPhoneSales from "@/assets/cover-phone-sales.jpg";
 import coverProduct from "@/assets/cover-product.jpg";
 import coverNegotiation from "@/assets/cover-negotiation.jpg";
+import practiceComplaint from "@/assets/practice-complaint.jpg";
+import practicePhone from "@/assets/practice-phone.jpg";
+import practiceNegotiation from "@/assets/practice-negotiation.jpg";
+import practiceDemo from "@/assets/practice-demo.jpg";
 
 const banners = [
   { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1 },
@@ -36,10 +40,10 @@ const courses = [
 ];
 
 const practices = [
-  { id: 1, title: "客户投诉处理", tag: "自由对话", difficulty: "中级", times: 1234 },
-  { id: 2, title: "首次电话沟通", tag: "固定剧本", difficulty: "初级", times: 892 },
-  { id: 3, title: "价格谈判实战", tag: "文本对练", difficulty: "高级", times: 567 },
-  { id: 4, title: "产品演示模拟", tag: "自由对话", difficulty: "中级", times: 345 },
+  { id: 1, title: "客户投诉处理", tag: "自由对话", difficulty: "中级", times: 1234, cover: practiceComplaint },
+  { id: 2, title: "首次电话沟通", tag: "固定剧本", difficulty: "初级", times: 892, cover: practicePhone },
+  { id: 3, title: "价格谈判实战", tag: "文本对练", difficulty: "高级", times: 567, cover: practiceNegotiation },
+  { id: 4, title: "产品演示模拟", tag: "自由对话", difficulty: "中级", times: 345, cover: practiceDemo },
 ];
 
 const roles = [
@@ -172,8 +176,8 @@ const HomePage = () => {
               className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
               onClick={() => navigate(`/practice-detail/${p.id}`)}
             >
-              <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/5 to-accent/50">
-                <Target className="h-8 w-8 text-primary/40" />
+              <div className="relative h-24 overflow-hidden">
+                <img src={p.cover} alt={p.title} className="h-full w-full object-cover" />
               </div>
               <div className="p-3">
                 <div className="mb-1 flex items-center gap-1.5">

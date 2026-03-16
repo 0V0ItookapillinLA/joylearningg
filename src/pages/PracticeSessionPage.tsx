@@ -66,20 +66,20 @@ const PracticeSessionPage = () => {
     navigate("/practice-complete");
   };
 
-  // Guide bottom sheet — within mobile container
+  // Guide bottom sheet
   const GuideSheet = () => (
     <AnimatePresence>
       {showGuide && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
             onClick={() => setShowGuide(false)}
           />
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="absolute bottom-0 left-0 right-0 z-[70] rounded-t-[24px] bg-card shadow-2xl"
+            className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
             style={{ maxHeight: "60vh" }}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -95,19 +95,20 @@ const PracticeSessionPage = () => {
     </AnimatePresence>
   );
 
-  // Hint center popup — centered within mobile container
+  // Hint center popup — fixed in viewport center
   const HintPopup = () => (
     <AnimatePresence>
       {showHint && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[60] bg-foreground/20"
+            className="fixed inset-0 z-[60] bg-foreground/20"
             onClick={() => setShowHint(false)}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-            className="absolute left-1/2 top-1/2 z-[70] w-[85%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-5 shadow-2xl"
+            className="fixed z-[70] w-[85%] max-w-[360px] rounded-2xl bg-card p-5 shadow-2xl"
+            style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
           >
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="h-5 w-5 text-yellow-500" />
@@ -126,7 +127,7 @@ const PracticeSessionPage = () => {
   // Video/Voice mode
   if (isVideoMode) {
     return (
-      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col relative">
+      <div className="fixed inset-0 z-50 bg-neutral-800 flex flex-col">
         <div className="flex items-center justify-between px-4 py-3 z-10">
           <button onClick={() => navigate(-1)} className="text-white/80"><ArrowLeft className="h-5 w-5" /></button>
           <span className="text-sm font-medium text-white">{role.name}</span>
@@ -135,7 +136,7 @@ const PracticeSessionPage = () => {
           </button>
         </div>
 
-        <div className="flex-1 relative flex items-center justify-center">
+        <div className="flex-1 relative flex items-center justify-center overflow-hidden">
           <img src={role.avatar} alt={role.name} className="w-full h-full object-cover opacity-80" />
           
           {/* Scene prompt for script mode */}
@@ -206,7 +207,7 @@ const PracticeSessionPage = () => {
 
   // Text mode
   return (
-    <div className="flex h-screen flex-col bg-background relative">
+    <div className="fixed inset-0 z-50 mx-auto max-w-[430px] flex flex-col bg-background">
       <div className="sticky top-0 z-10 flex items-center justify-between bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
