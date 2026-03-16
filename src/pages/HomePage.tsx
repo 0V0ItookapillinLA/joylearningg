@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Play, BookOpen, Target, Brain, Trophy, Library, ChevronRight, Star, Users, MessageSquare, FileText, Video } from "lucide-react";
+import { Search, Bell, Play, BookOpen, Target, Brain, Library, ChevronRight, Star, Users, Video, FileText, Trophy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -33,10 +33,10 @@ const courses = [
 ];
 
 const practices = [
-  { id: 1, title: "客户投诉处理", tags: ["自由对话", "文本对练"], difficulty: "中级", times: 1234 },
-  { id: 2, title: "首次电话沟通", tags: ["固定剧本", "文本对练"], difficulty: "初级", times: 892 },
-  { id: 3, title: "价格谈判实战", tags: ["自由对话"], difficulty: "高级", times: 567 },
-  { id: 4, title: "产品演示模拟", tags: ["固定剧本", "自由对话"], difficulty: "中级", times: 345 },
+  { id: 1, title: "客户投诉处理", tag: "自由对话", difficulty: "中级", times: 1234 },
+  { id: 2, title: "首次电话沟通", tag: "固定剧本", difficulty: "初级", times: 892 },
+  { id: 3, title: "价格谈判实战", tag: "文本对练", difficulty: "高级", times: 567 },
+  { id: 4, title: "产品演示模拟", tag: "自由对话", difficulty: "中级", times: 345 },
 ];
 
 const roles = [
@@ -46,10 +46,15 @@ const roles = [
   { id: 4, name: "谈判专家李总", desc: "精明的商务谈判对手", avatar: roleNegotiator, tag: "商务谈判" },
 ];
 
+const tagColor: Record<string, string> = {
+  "自由对话": "bg-primary/10 text-primary",
+  "固定剧本": "bg-accent text-accent-foreground",
+  "文本对练": "bg-muted text-muted-foreground",
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [bannerIdx, setBannerIdx] = useState(0);
-  const [activeTab, setActiveTab] = useState<"course" | "practice">("course");
 
   return (
     <div className="space-y-5 pb-4">
@@ -68,15 +73,9 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* Banner with real images */}
+      {/* Banner */}
       <div className="relative mx-4 overflow-hidden rounded-2xl">
-        <motion.div
-          key={bannerIdx}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="relative h-36"
-        >
+        <motion.div key={bannerIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} className="relative h-36">
           <img src={banners[bannerIdx].image} alt={banners[bannerIdx].title} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
           <div className="absolute bottom-4 left-5">
@@ -86,21 +85,14 @@ const HomePage = () => {
         </motion.div>
         <div className="absolute bottom-2 right-3 flex gap-1.5">
           {banners.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setBannerIdx(i)}
-              className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`}
-            />
+            <button key={i} onClick={() => setBannerIdx(i)} className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} />
           ))}
         </div>
       </div>
 
       {/* Fragment Learning Entry */}
       <motion.div whileTap={{ scale: 0.98 }} className="px-4">
-        <Card
-          className="flex cursor-pointer items-center gap-4 border-primary/20 bg-gradient-to-r from-accent to-card p-4"
-          onClick={() => navigate("/fragment-learn")}
-        >
+        <Card className="flex cursor-pointer items-center gap-4 border-primary/20 bg-gradient-to-r from-accent to-card p-4" onClick={() => navigate("/fragment-learn")}>
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
             <Play className="h-6 w-6 text-primary" />
           </div>
@@ -115,11 +107,7 @@ const HomePage = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-5 gap-2 px-4">
         {quickActions.map((action) => (
-          <button
-            key={action.label}
-            onClick={() => navigate(action.path)}
-            className="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-colors hover:bg-muted"
-          >
+          <button key={action.label} onClick={() => navigate(action.path)} className="flex flex-col items-center gap-1.5 rounded-xl py-3 transition-colors hover:bg-muted">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
               <action.icon className="h-5 w-5 text-primary" />
             </div>
@@ -128,97 +116,71 @@ const HomePage = () => {
         ))}
       </div>
 
-      {/* Course & Practice Tabs */}
+      {/* 推荐课程 */}
       <div className="px-4">
-        <div className="mb-3 flex items-center gap-4 border-b border-border">
-          <button
-            onClick={() => setActiveTab("course")}
-            className={`pb-2 text-sm font-semibold transition-colors ${activeTab === "course" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-          >
-            推荐课程
-          </button>
-          <button
-            onClick={() => setActiveTab("practice")}
-            className={`pb-2 text-sm font-semibold transition-colors ${activeTab === "practice" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"}`}
-          >
-            推荐练习
-          </button>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold">推荐课程</h3>
+          <button className="text-xs text-primary" onClick={() => navigate("/learn")}>更多</button>
         </div>
-
-        {activeTab === "course" && (
-          <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
-            {courses.map((course) => (
-              <Card
-                key={course.id}
-                className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
-                onClick={() => navigate(`/chapter/${course.id}`)}
-              >
-                <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/10 to-accent">
-                  {course.type === "video" ? (
-                    <Video className="h-8 w-8 text-primary/40" />
-                  ) : (
-                    <FileText className="h-8 w-8 text-primary/40" />
-                  )}
+        <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
+          {courses.map((course) => (
+            <Card
+              key={course.id}
+              className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
+              onClick={() => navigate(`/course/${course.id}?type=${course.type}`)}
+            >
+              <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/10 to-accent">
+                {course.type === "video" ? <Video className="h-8 w-8 text-primary/40" /> : <FileText className="h-8 w-8 text-primary/40" />}
+              </div>
+              <div className="p-3">
+                <div className="mb-1">
+                  <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-medium ${course.type === "video" ? "bg-primary/10 text-primary" : "bg-accent text-accent-foreground"}`}>
+                    {course.type === "video" ? "视频课程" : "PDF资料"}
+                  </span>
                 </div>
-                <div className="p-3">
-                  <div className="mb-1">
-                    <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-medium ${course.type === "video" ? "bg-primary/10 text-primary" : "bg-accent text-accent-foreground"}`}>
-                      {course.type === "video" ? "视频课程" : "PDF资料"}
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-medium leading-tight line-clamp-2">{course.title}</h4>
-                  <div className="mt-2 flex items-center gap-2 text-[10px] text-muted-foreground">
-                    <span className="flex items-center gap-0.5">
-                      <Users className="h-3 w-3" />{course.learners}
-                    </span>
-                    <span className="flex items-center gap-0.5">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />{course.rating}
-                    </span>
-                  </div>
+                <h4 className="text-xs font-medium leading-tight line-clamp-2">{course.title}</h4>
+                <div className="mt-2 flex items-center gap-2 text-[10px] text-muted-foreground">
+                  <span className="flex items-center gap-0.5"><Users className="h-3 w-3" />{course.learners}</span>
+                  <span className="flex items-center gap-0.5"><Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />{course.rating}</span>
                 </div>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === "practice" && (
-          <div className="space-y-2">
-            {practices.map((p) => (
-              <Card
-                key={p.id}
-                className="cursor-pointer p-3 transition-shadow hover:shadow-md"
-                onClick={() => navigate("/practice")}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-medium">{p.title}</h4>
-                      <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-medium ${
-                        p.difficulty === "初级" ? "bg-green-50 text-green-600" :
-                        p.difficulty === "中级" ? "bg-yellow-50 text-yellow-600" :
-                        "bg-red-50 text-red-600"
-                      }`}>{p.difficulty}</span>
-                    </div>
-                    <div className="mt-1.5 flex flex-wrap gap-1">
-                      {p.tags.map((tag) => (
-                        <span key={tag} className="rounded bg-accent px-1.5 py-0.5 text-[10px] text-accent-foreground">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] text-muted-foreground">{p.times}人已练</span>
-                    <ChevronRight className="ml-1 inline h-3.5 w-3.5 text-muted-foreground" />
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      {/* Role Recommendations */}
+      {/* 推荐练习 */}
+      <div className="px-4">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold">推荐练习</h3>
+          <button className="text-xs text-primary" onClick={() => navigate("/practice")}>更多</button>
+        </div>
+        <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
+          {practices.map((p) => (
+            <Card
+              key={p.id}
+              className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
+              onClick={() => navigate(`/practice-detail/${p.id}`)}
+            >
+              <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/5 to-accent/50">
+                <Target className="h-8 w-8 text-primary/40" />
+              </div>
+              <div className="p-3">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <span className={`inline-block rounded px-1.5 py-0.5 text-[9px] font-medium ${tagColor[p.tag] || "bg-muted text-muted-foreground"}`}>{p.tag}</span>
+                  <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-medium ${
+                    p.difficulty === "初级" ? "bg-green-50 text-green-600" : p.difficulty === "中级" ? "bg-yellow-50 text-yellow-600" : "bg-red-50 text-red-600"
+                  }`}>{p.difficulty}</span>
+                </div>
+                <h4 className="text-xs font-medium leading-tight line-clamp-2">{p.title}</h4>
+                <p className="mt-1.5 text-[10px] text-muted-foreground">{p.times}人已练</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* AI陪练角色推荐 */}
       <div className="px-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">AI陪练角色</h3>
@@ -229,7 +191,7 @@ const HomePage = () => {
             <div
               key={role.id}
               className="flex w-28 shrink-0 cursor-pointer flex-col items-center rounded-2xl bg-card p-3 shadow-sm border border-border transition-shadow hover:shadow-md"
-              onClick={() => navigate("/practice")}
+              onClick={() => navigate(`/practice-session/${role.id}?mode=text`)}
             >
               <img src={role.avatar} alt={role.name} className="h-14 w-14 rounded-full object-cover bg-accent" />
               <h4 className="mt-2 text-xs font-medium text-center leading-tight">{role.name}</h4>
