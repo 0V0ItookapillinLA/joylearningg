@@ -91,7 +91,9 @@ type Tab = "leaderboard" | "medals" | "calendar";
 type LeaderboardTab = "total" | "position" | "week";
 
 const CommunityPage = () => {
-  const [activeTab, setActiveTab] = useState<Tab>("leaderboard");
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab") as Tab | null;
+  const [activeTab, setActiveTab] = useState<Tab>(tabParam && ["leaderboard", "medals", "calendar"].includes(tabParam) ? tabParam : "leaderboard");
   const [viewYear, setViewYear] = useState(currentYear);
   const [viewMonth, setViewMonth] = useState(currentMonth);
   const [lbTab, setLbTab] = useState<LeaderboardTab>("total");
