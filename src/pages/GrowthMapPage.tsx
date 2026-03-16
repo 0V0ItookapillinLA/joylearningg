@@ -1,113 +1,70 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 
-const levels = [
+interface Level {
+  level: string;
+  title: string;
+  status: "completed" | "current" | "locked";
+  professional: string[];
+  general: string[];
+  competency: { name: string; score: number; target: number }[];
+}
+
+const levels: Level[] = [
   {
-    level: "P1",
-    title: "初级销售",
-    status: "completed" as const,
+    level: "P1", title: "初级销售", status: "completed",
     professional: ["产品基础知识", "销售话术入门", "客户接待流程"],
     general: ["职业素养", "时间管理", "沟通基础"],
+    competency: [
+      { name: "产品知识", score: 92, target: 80 }, { name: "沟通技巧", score: 85, target: 75 },
+      { name: "客户接待", score: 88, target: 80 }, { name: "基础话术", score: 90, target: 75 },
+      { name: "时间管理", score: 82, target: 70 }, { name: "职业素养", score: 86, target: 80 },
+    ],
   },
   {
-    level: "P2",
-    title: "销售顾问",
-    status: "completed" as const,
+    level: "P2", title: "销售顾问", status: "completed",
     professional: ["需求分析技巧", "FABE法则", "CRM系统操作"],
     general: ["团队协作", "情绪管理", "目标设定"],
+    competency: [
+      { name: "需求分析", score: 88, target: 85 }, { name: "FABE法则", score: 85, target: 80 },
+      { name: "CRM操作", score: 90, target: 85 }, { name: "团队协作", score: 82, target: 80 },
+      { name: "情绪管理", score: 78, target: 75 }, { name: "目标设定", score: 80, target: 80 },
+    ],
   },
   {
-    level: "P3",
-    title: "高级销售顾问",
-    status: "current" as const,
+    level: "P3", title: "高级销售顾问", status: "current",
     professional: ["异议处理策略", "竞品分析", "大客户开发"],
     general: ["项目管理", "演讲表达", "批判思维"],
+    competency: [
+      { name: "异议处理", score: 72, target: 85 }, { name: "竞品分析", score: 68, target: 80 },
+      { name: "大客户开发", score: 65, target: 85 }, { name: "项目管理", score: 70, target: 80 },
+      { name: "演讲表达", score: 75, target: 80 }, { name: "批判思维", score: 60, target: 75 },
+    ],
   },
   {
-    level: "P4",
-    title: "资深销售顾问",
-    status: "locked" as const,
+    level: "P4", title: "资深销售顾问", status: "locked",
     professional: ["复杂谈判技巧", "方案式销售", "行业洞察"],
     general: ["领导力基础", "跨部门协作", "商业思维"],
+    competency: [
+      { name: "谈判技巧", score: 0, target: 85 }, { name: "方案销售", score: 0, target: 85 },
+      { name: "行业洞察", score: 0, target: 80 }, { name: "领导力", score: 0, target: 80 },
+      { name: "跨部门协作", score: 0, target: 80 }, { name: "商业思维", score: 0, target: 85 },
+    ],
   },
   {
-    level: "P5",
-    title: "销售主管",
-    status: "locked" as const,
+    level: "P5", title: "销售主管", status: "locked",
     professional: ["团队销售管理", "销售漏斗优化", "绩效辅导"],
     general: ["人才选拔", "冲突管理", "教练技术"],
-  },
-  {
-    level: "P6",
-    title: "高级销售主管",
-    status: "locked" as const,
-    professional: ["区域市场策略", "KA客户管理", "渠道拓展"],
-    general: ["战略思维", "数据分析", "变革管理"],
-  },
-  {
-    level: "P7",
-    title: "销售经理",
-    status: "locked" as const,
-    professional: ["P&L管理", "年度销售规划", "团队建设"],
-    general: ["组织设计", "文化塑造", "财务分析"],
-  },
-  {
-    level: "P8",
-    title: "高级销售经理",
-    status: "locked" as const,
-    professional: ["多区域管理", "大客户战略", "合作伙伴生态"],
-    general: ["高管沟通", "危机管理", "创新思维"],
-  },
-  {
-    level: "P9",
-    title: "区域总监",
-    status: "locked" as const,
-    professional: ["区域P&L", "组织发展", "市场竞争战略"],
-    general: ["影响力", "系统思维", "商业谈判"],
-  },
-  {
-    level: "P10",
-    title: "高级区域总监",
-    status: "locked" as const,
-    professional: ["多区战略协同", "人才梯队建设", "品牌建设"],
-    general: ["战略规划", "公共演讲", "资源整合"],
-  },
-  {
-    level: "P11",
-    title: "销售副总裁",
-    status: "locked" as const,
-    professional: ["全国销售战略", "商业模式创新", "战略合作"],
-    general: ["愿景领导", "董事会沟通", "投资决策"],
-  },
-  {
-    level: "P12",
-    title: "高级副总裁",
-    status: "locked" as const,
-    professional: ["集团业务规划", "并购整合", "国际化布局"],
-    general: ["全球视野", "政商关系", "企业治理"],
-  },
-  {
-    level: "P13",
-    title: "执行副总裁",
-    status: "locked" as const,
-    professional: ["集团战略制定", "资本运作", "生态构建"],
-    general: ["哲学思维", "社会责任", "行业引领"],
-  },
-  {
-    level: "P14",
-    title: "首席营收官",
-    status: "locked" as const,
-    professional: ["全球营收战略", "商业生态系统", "数字化转型"],
-    general: ["前瞻思维", "组织变革", "价值创造"],
-  },
-  {
-    level: "P15",
-    title: "首席执行官",
-    status: "locked" as const,
-    professional: ["企业愿景规划", "资本市场运营", "战略联盟"],
-    general: ["使命驱动", "全局领导", "传承与创新"],
+    competency: [
+      { name: "团队管理", score: 0, target: 90 }, { name: "漏斗优化", score: 0, target: 85 },
+      { name: "绩效辅导", score: 0, target: 85 }, { name: "人才选拔", score: 0, target: 80 },
+      { name: "冲突管理", score: 0, target: 80 }, { name: "教练技术", score: 0, target: 85 },
+    ],
   },
 ];
 
@@ -115,6 +72,7 @@ const currentIndex = levels.findIndex((l) => l.status === "current");
 
 const GrowthMapPage = () => {
   const navigate = useNavigate();
+  const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
@@ -123,7 +81,6 @@ const GrowthMapPage = () => {
         <h1 className="text-sm font-semibold">成长地图</h1>
       </div>
 
-      {/* Current level summary */}
       <div className="p-4">
         <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent">
           <div className="flex items-center gap-3 mb-3">
@@ -139,21 +96,17 @@ const GrowthMapPage = () => {
         </Card>
       </div>
 
-      {/* Vertical timeline */}
       <div className="px-4 pb-8">
         <div className="relative pl-8">
-          {/* Vertical line */}
           <div className="absolute left-[15px] top-0 bottom-0 w-0.5 bg-border" />
-
           <div className="space-y-4">
-            {levels.map((level, i) => {
+            {levels.map((level) => {
               const isCompleted = level.status === "completed";
               const isCurrent = level.status === "current";
               const isLocked = level.status === "locked";
 
               return (
                 <div key={level.level} className="relative">
-                  {/* Node on timeline */}
                   <div className={`absolute -left-8 top-3 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold border-2 ${
                     isCompleted ? "bg-green-500 border-green-500 text-white" :
                     isCurrent ? "bg-primary border-primary text-primary-foreground animate-pulse" :
@@ -162,7 +115,10 @@ const GrowthMapPage = () => {
                     {level.level}
                   </div>
 
-                  <Card className={`p-3.5 transition-all ${isLocked ? "opacity-40" : ""} ${isCurrent ? "border-primary/40 shadow-md" : ""}`}>
+                  <Card
+                    className={`p-3.5 transition-all cursor-pointer ${isLocked ? "opacity-40" : ""} ${isCurrent ? "border-primary/40 shadow-md" : ""}`}
+                    onClick={() => !isLocked && setSelectedLevel(level)}
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <h4 className="text-xs font-bold">{level.title}</h4>
@@ -173,7 +129,9 @@ const GrowthMapPage = () => {
                           <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-semibold text-green-600">已达成</span>
                         )}
                       </div>
-                      {/* No chevron - cards have no drill-down */}
+                      {!isLocked && (
+                        <span className="text-[9px] text-primary font-medium">查看评估 →</span>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -201,6 +159,79 @@ const GrowthMapPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Competency Modal */}
+      <AnimatePresence>
+        {selectedLevel && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+              onClick={() => setSelectedLevel(null)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl overflow-hidden"
+              style={{ maxHeight: "80vh" }}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <h3 className="text-sm font-semibold">{selectedLevel.level} · {selectedLevel.title} 胜任力评估</h3>
+                <button onClick={() => setSelectedLevel(null)}>
+                  <X className="h-5 w-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div className="overflow-y-auto p-4 space-y-4" style={{ maxHeight: "calc(80vh - 56px)" }}>
+                {/* Overall score */}
+                <div className="text-center">
+                  <div className="inline-flex h-20 w-20 items-center justify-center rounded-full border-4 border-primary/20 mb-2">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                      <span className="text-xl font-bold text-primary">
+                        {selectedLevel.competency.length > 0
+                          ? Math.round(selectedLevel.competency.reduce((sum, c) => sum + c.score, 0) / selectedLevel.competency.length)
+                          : 0}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs font-semibold">综合胜任力评分</p>
+                </div>
+
+                {/* Radar */}
+                <ResponsiveContainer width="100%" height={200}>
+                  <RadarChart data={selectedLevel.competency.map(c => ({ skill: c.name, current: c.score, target: c.target }))}>
+                    <PolarGrid stroke="hsl(var(--border))" />
+                    <PolarAngleAxis dataKey="skill" tick={{ fontSize: 9, fill: "hsl(var(--muted-foreground))" }} />
+                    <Radar dataKey="target" fill="hsl(var(--muted))" fillOpacity={0.3} stroke="hsl(var(--muted-foreground))" strokeWidth={1} strokeDasharray="4 4" />
+                    <Radar dataKey="current" fill="hsl(var(--primary))" fillOpacity={0.2} stroke="hsl(var(--primary))" strokeWidth={2} />
+                  </RadarChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-6 text-[10px]">
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary" />当前水平</span>
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-muted-foreground" />目标水平</span>
+                </div>
+
+                {/* Dimension bars */}
+                <div className="space-y-3">
+                  {selectedLevel.competency.map((d) => (
+                    <div key={d.name}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] font-medium">{d.name}</span>
+                        <span className="text-[10px] text-muted-foreground">{d.score}/{d.target}</span>
+                      </div>
+                      <Progress value={d.target > 0 ? (d.score / d.target) * 100 : 0} className="h-2" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

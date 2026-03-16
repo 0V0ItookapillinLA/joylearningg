@@ -1,17 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { Home, BookOpen, Users, User, MessageCircle, X, Send, Sparkles } from "lucide-react";
+import { Home, BookOpen, Users, User, X, Send, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import aiAvatar from "@/assets/ai-assistant-avatar.png";
 
 type Message = { role: "ai" | "user"; text: string };
 
 const tabs = [
   { to: "/", icon: Home, label: "首页" },
   { to: "/learn", icon: BookOpen, label: "学习" },
-  { to: "/__ai__", icon: MessageCircle, label: "AI助手", isAI: true },
+  { to: "/__ai__", icon: null, label: "AI助手", isAI: true },
   { to: "/community", icon: Users, label: "社区" },
   { to: "/profile", icon: User, label: "我的" },
 ];
@@ -63,11 +64,10 @@ const MobileLayout = () => {
         <Outlet />
       </main>
 
-      {/* AI Chat Overlay - centered, 2/3 height */}
+      {/* AI Chat Overlay */}
       <AnimatePresence>
         {aiOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,7 +76,6 @@ const MobileLayout = () => {
               className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
               onClick={() => setAiOpen(false)}
             />
-            {/* Panel */}
             <motion.div
               initial={{ y: "100%", opacity: 0.5 }}
               animate={{ y: 0, opacity: 1 }}
@@ -85,7 +84,6 @@ const MobileLayout = () => {
               className="fixed inset-x-0 bottom-0 z-[70] mx-auto w-full max-w-[430px] flex flex-col rounded-t-[28px] border-t border-border/50 bg-card shadow-2xl overflow-hidden"
               style={{ height: "66dvh" }}
             >
-              {/* Header with AI glow */}
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-border/50 bg-gradient-to-r from-primary/5 to-accent/10">
                 <div className="flex items-center gap-2">
                   <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
@@ -105,7 +103,6 @@ const MobileLayout = () => {
                 </button>
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
                 {messages.map((msg, i) => (
                   <motion.div
@@ -141,7 +138,6 @@ const MobileLayout = () => {
                 <div ref={chatEndRef} />
               </div>
 
-              {/* Input */}
               <div className="flex items-center gap-2 border-t border-border/50 p-3 bg-card">
                 <Input
                   value={input}
@@ -172,16 +168,16 @@ const MobileLayout = () => {
                 <button
                   key={tab.label}
                   onClick={() => setAiOpen(true)}
-                  className="flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium text-muted-foreground transition-all duration-200 active:scale-90"
+                  className="flex flex-col items-center gap-0.5 px-3 py-1 text-[10px] font-medium text-muted-foreground transition-all duration-200 active:scale-90 -mt-5"
                 >
                   <motion.div
-                    className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                    className="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 overflow-hidden border-2 border-card"
                     whileTap={{ scale: 0.85 }}
                   >
-                    <tab.icon className="h-4 w-4" />
-                    <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" style={{ animationDuration: "3s" }} />
+                    <img src={aiAvatar} alt="AI助手" className="h-full w-full object-cover" />
+                    <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" style={{ animationDuration: "3s" }} />
                   </motion.div>
-                  <span className="mt-0.5">{tab.label}</span>
+                  <span className="mt-1 font-semibold text-primary">{tab.label}</span>
                 </button>
               ) : (
                 <NavLink
@@ -198,7 +194,7 @@ const MobileLayout = () => {
                   {({ isActive }) => (
                     <>
                       <motion.div whileTap={{ scale: 0.85 }}>
-                        <tab.icon className={cn("h-5 w-5 transition-all duration-200", isActive && "stroke-[2.5]")} />
+                        {tab.icon && <tab.icon className={cn("h-5 w-5 transition-all duration-200", isActive && "stroke-[2.5]")} />}
                       </motion.div>
                       <span>{tab.label}</span>
                     </>
