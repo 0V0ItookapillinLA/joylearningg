@@ -141,8 +141,8 @@ const CourseDetailPage = () => {
         </div>
       </div>
 
-      {/* Sticky bottom */}
-      <div className="sticky bottom-0 z-10 bg-card border-t border-border px-4 py-3">
+      {/* Fixed bottom */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 mx-auto max-w-[430px] bg-card border-t border-border px-4 py-3">
         <Button className="w-full rounded-xl h-11 text-sm">
           {isVideo ? "开始学习" : "阅读全文"}
         </Button>
