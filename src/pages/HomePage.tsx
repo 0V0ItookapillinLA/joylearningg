@@ -130,7 +130,7 @@ const HomePage = () => {
             <Card
               key={course.id}
               className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
-              onClick={() => navigate(`/course/${course.id}?type=${course.type}`)}
+              onClick={() => navigate(course.type === "video" ? `/video/${course.id}` : `/doc/${course.id}`)}
             >
               <div className="relative h-24 overflow-hidden">
                 <img src={course.cover} alt={course.title} className="h-full w-full object-cover" />
