@@ -15,6 +15,8 @@ import ExamPage from "@/pages/ExamPage";
 import PracticeReviewPage from "@/pages/PracticeReviewPage";
 import GrowthMapPage from "@/pages/GrowthMapPage";
 import CompetencyPage from "@/pages/CompetencyPage";
+import ComprehensiveEvalPage from "@/pages/ComprehensiveEvalPage";
+import LearningMapPage from "@/pages/LearningMapPage";
 import SharedPracticeDetailPage from "@/pages/SharedPracticeDetailPage";
 import PlanDetailPage from "@/pages/PlanDetailPage";
 import PracticeDetailPage from "@/pages/PracticeDetailPage";
@@ -50,7 +52,9 @@ const App = () => (
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/practice-review" element={<PracticeReviewPage />} />
           <Route path="/growth-map" element={<GrowthMapPage />} />
+          <Route path="/learning-map" element={<LearningMapPage />} />
           <Route path="/competency" element={<CompetencyPage />} />
+          <Route path="/comprehensive-eval" element={<ComprehensiveEvalPage />} />
           <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
           <Route path="/plan/:id" element={<PlanDetailPage />} />
           <Route path="*" element={<NotFound />} />

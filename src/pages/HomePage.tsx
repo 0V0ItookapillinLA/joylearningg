@@ -153,7 +153,7 @@ const HomePage = () => {
       <div className="px-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">推荐练习</h3>
-          <button className="text-xs text-primary" onClick={() => navigate("/practice")}>更多</button>
+          <button className="text-xs text-primary" onClick={() => navigate("/practice?tab=0")}>更多</button>
         </div>
         <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
           {practices.map((p) => (
@@ -184,7 +184,7 @@ const HomePage = () => {
       <div className="px-4">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">AI陪练角色</h3>
-          <button className="text-xs text-primary" onClick={() => navigate("/practice")}>更多</button>
+          <button className="text-xs text-primary" onClick={() => navigate("/practice?tab=1")}>更多</button>
         </div>
         <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
           {roles.map((role) => (

@@ -4,28 +4,37 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 
+const tagColor: Record<string, string> = {
+  "自由对话": "bg-primary/10 text-primary",
+  "固定剧本": "bg-accent text-accent-foreground",
+  "文本对练": "bg-muted text-muted-foreground",
+};
+
 const sharedPractices = [
-  { id: 1, user: "用户1393_fvp", avatar: "🧑", role: "渴望真爱的自信男士", title: "期待这个案例被督导。", likes: 45, comments: 12, views: 342 },
-  { id: 2, user: "用户6256_fv0", avatar: "👩", role: "投诉客户王先生", title: "一种说不出的感觉，是什么感觉？", likes: 89, comments: 23, views: 891 },
-  { id: 3, user: "用户1094_j00", avatar: "👨", role: "销售经理张总", title: "首次面试模拟，感觉收获很大", likes: 34, comments: 8, views: 567 },
-  { id: 4, user: "小明同学", avatar: "🧑‍💼", role: "客服小美", title: "客户服务场景对练心得", likes: 120, comments: 56, views: 1203 },
-  { id: 5, user: "培训师阿杰", avatar: "👨‍🏫", role: "谈判对手", title: "谈判场景的5个关键话术", likes: 210, comments: 78, views: 2345 },
-  { id: 6, user: "新人小白", avatar: "🧑‍🎓", role: "面试官", title: "模拟面试的正确打开方式", likes: 67, comments: 15, views: 456 },
+  { id: 1, user: "销售冠军小李", avatar: "🏆", role: "难缠客户王先生", title: "处理客户投诉的5个关键步骤", tag: "自由对话", likes: 245, comments: 52, views: 1342 },
+  { id: 2, user: "金牌顾问Amy", avatar: "👩‍💼", role: "采购经理陈总", title: "B2B大客户谈判实录分享", tag: "固定剧本", likes: 189, comments: 43, views: 1091 },
+  { id: 3, user: "培训师老张", avatar: "👨‍🏫", role: "销售经理张总", title: "新人首次电话销售话术拆解", tag: "文本对练", likes: 134, comments: 28, views: 867 },
+  { id: 4, user: "实习生小王", avatar: "🧑‍💼", role: "客服小美", title: "售后回访中的情绪管理心得", tag: "自由对话", likes: 98, comments: 15, views: 523 },
+  { id: 5, user: "区域经理赵哥", avatar: "💼", role: "谈判专家李总", title: "价格谈判中的底线设定技巧", tag: "固定剧本", likes: 312, comments: 78, views: 2145 },
 ];
 
 const weeklyHot = [
-  { id: 7, user: "用户3310_vq2", avatar: "👩‍💼", role: "单身母亲的抉择", title: "新手的第一次对练-单亲妈妈的抉择", likes: 230, comments: 89, views: 2341 },
-  { id: 8, user: "乐宁", avatar: "🧑‍🎓", role: "难缠客户", title: "如何应对客户的无理要求", likes: 187, comments: 45, views: 1856 },
-  { id: 9, user: "销售达人", avatar: "💼", role: "谈判专家", title: "价格谈判的3个关键技巧分享", likes: 156, comments: 67, views: 1543 },
-  { id: 10, user: "职场老鸟", avatar: "🦅", role: "HR经理", title: "绩效面谈模拟复盘", likes: 198, comments: 52, views: 1789 },
-  { id: 11, user: "学习达人", avatar: "📚", role: "产品专家", title: "产品演示中的常见陷阱", likes: 145, comments: 34, views: 1234 },
+  { id: 7, user: "销售达人", avatar: "🔥", role: "难缠客户王先生", title: "如何把投诉客户变成忠实客户", tag: "自由对话", likes: 530, comments: 189, views: 4341 },
+  { id: 8, user: "话术专家", avatar: "💬", role: "新客户赵小姐", title: "首次接触客户的黄金30秒", tag: "固定剧本", likes: 487, comments: 145, views: 3856 },
+  { id: 9, user: "谈判高手", avatar: "🤝", role: "谈判专家李总", title: "竞品对比时的3个反转话术", tag: "文本对练", likes: 456, comments: 167, views: 3543 },
+  { id: 10, user: "销冠小陈", avatar: "👑", role: "采购经理陈总", title: "年度大单促成的完整复盘", tag: "自由对话", likes: 398, comments: 152, views: 2789 },
 ];
 
 const topRated = [
-  { id: 12, user: "王导师", avatar: "👨‍🏫", role: "资深培训师", title: "高分学员的共同特点分析", likes: 456, comments: 123, views: 5678 },
-  { id: 13, user: "赵经理", avatar: "👔", role: "销售总监", title: "如何从新人快速成长为销售冠军", likes: 389, comments: 98, views: 4567 },
-  { id: 14, user: "陈老师", avatar: "📖", role: "培训讲师", title: "客户心理分析实战案例", likes: 278, comments: 67, views: 3456 },
-  { id: 15, user: "李同学", avatar: "🎓", role: "学员代表", title: "从零基础到90分的学习方法", likes: 567, comments: 156, views: 6789 },
+  { id: 12, user: "王总监", avatar: "👨‍💼", role: "销售经理张总", title: "95分高分案例：完美异议处理", tag: "固定剧本", likes: 656, comments: 223, views: 6678 },
+  { id: 13, user: "赵经理", avatar: "👔", role: "难缠客户王先生", title: "从愤怒到满意：满分客诉处理", tag: "自由对话", likes: 589, comments: 198, views: 5567 },
+  { id: 14, user: "陈老师", avatar: "📖", role: "谈判专家李总", title: "教科书级别的价格谈判录", tag: "文本对练", likes: 478, comments: 167, views: 4456 },
+];
+
+const newbiePicks = [
+  { id: 16, user: "新人小白", avatar: "🌱", role: "客服小美", title: "新手第一次AI对练感悟", tag: "文本对练", likes: 67, comments: 25, views: 456 },
+  { id: 17, user: "入职新人", avatar: "🎓", role: "销售经理张总", title: "入职一周的电话销售体验", tag: "固定剧本", likes: 89, comments: 32, views: 678 },
+  { id: 18, user: "转岗小刘", avatar: "🔄", role: "新客户赵小姐", title: "从技术转销售的第一课", tag: "自由对话", likes: 112, comments: 41, views: 789 },
 ];
 
 const plans = [
@@ -40,7 +49,7 @@ const PracticeCard = ({ item, onClick }: { item: typeof sharedPractices[0]; onCl
   <Card className="w-56 shrink-0 cursor-pointer p-3.5 transition-shadow hover:shadow-md" onClick={onClick}>
     <div className="flex items-center gap-2 mb-2">
       <span className="text-lg">{item.avatar}</span>
-      <span className="text-[11px] text-muted-foreground truncate">{item.user}的分享</span>
+      <span className="text-[11px] text-muted-foreground truncate">{item.user}</span>
     </div>
     <div className="rounded-lg bg-muted p-2.5 mb-2">
       <div className="flex items-center gap-1 text-[10px] text-muted-foreground mb-1">
@@ -49,6 +58,9 @@ const PracticeCard = ({ item, onClick }: { item: typeof sharedPractices[0]; onCl
         <span>的对练</span>
       </div>
       <p className="text-xs font-medium line-clamp-2">{item.title}</p>
+    </div>
+    <div className="flex items-center gap-2 mb-2">
+      <span className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${tagColor[item.tag] || "bg-muted text-muted-foreground"}`}>{item.tag}</span>
     </div>
     <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
       <span className="flex items-center gap-0.5"><Heart className="h-3 w-3" />{item.likes}</span>
@@ -83,7 +95,6 @@ const LearnPage = () => {
 
       {mainTab === "public" && (
         <div className="space-y-5 px-4 pt-4">
-          {/* 为你推荐 */}
           <div>
             <h3 className="mb-3 text-sm font-semibold flex items-center gap-1.5"><Target className="h-4 w-4 text-primary" />为你推荐</h3>
             <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
@@ -93,7 +104,6 @@ const LearnPage = () => {
             </div>
           </div>
 
-          {/* 本周浏览最多 */}
           <div>
             <h3 className="mb-3 text-sm font-semibold flex items-center gap-1.5"><Flame className="h-4 w-4 text-destructive" />本周浏览最多</h3>
             <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
@@ -103,7 +113,6 @@ const LearnPage = () => {
             </div>
           </div>
 
-          {/* 高分优秀案例 */}
           <div>
             <h3 className="mb-3 text-sm font-semibold flex items-center gap-1.5"><Award className="h-4 w-4 text-amber-500" />高分优秀案例</h3>
             <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
@@ -113,12 +122,11 @@ const LearnPage = () => {
             </div>
           </div>
 
-          {/* 新人必看 */}
           <div>
             <h3 className="mb-3 text-sm font-semibold flex items-center gap-1.5"><Users className="h-4 w-4 text-primary" />新人必看</h3>
             <div className="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-1">
-              {sharedPractices.slice(0, 4).map((item) => (
-                <PracticeCard key={`newbie-${item.id}`} item={item} onClick={() => navigate(`/shared-practice/${item.id}`)} />
+              {newbiePicks.map((item) => (
+                <PracticeCard key={item.id} item={item} onClick={() => navigate(`/shared-practice/${item.id}`)} />
               ))}
             </div>
           </div>

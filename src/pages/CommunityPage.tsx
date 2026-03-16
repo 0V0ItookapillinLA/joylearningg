@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Crown, TrendingUp, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Crown, TrendingUp, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -24,7 +24,6 @@ function getFirstDayOfMonth(year: number, month: number) {
 
 const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
 
-// Medal data
 const medalCategories = [
   {
     name: "坚持达人",
@@ -63,15 +62,17 @@ const medalCategories = [
   },
 ];
 
+const departments = ["全部部门", "华东区", "华南区", "华北区", "西南区", "华中区"];
+
 const leaderboard = [
-  { rank: 1, name: "李明", initial: "李", score: 95.2, medals: 12 },
-  { rank: 2, name: "王芳", initial: "王", score: 92.8, medals: 10 },
-  { rank: 3, name: "张伟", initial: "张", score: 90.5, medals: 9 },
-  { rank: 4, name: "刘洋", initial: "刘", score: 89.3, medals: 8 },
-  { rank: 5, name: "陈静", initial: "陈", score: 87.1, medals: 7 },
-  { rank: 6, name: "张清", initial: "清", score: 82.7, medals: 6, isMe: true },
-  { rank: 7, name: "赵磊", initial: "赵", score: 80.5, medals: 5 },
-  { rank: 8, name: "孙丽", initial: "孙", score: 78.2, medals: 4 },
+  { rank: 1, name: "李明", initial: "李", score: 95.2, medals: 12, dept: "华东区" },
+  { rank: 2, name: "王芳", initial: "王", score: 92.8, medals: 10, dept: "华南区" },
+  { rank: 3, name: "张伟", initial: "张", score: 90.5, medals: 9, dept: "华东区" },
+  { rank: 4, name: "刘洋", initial: "刘", score: 89.3, medals: 8, dept: "华北区" },
+  { rank: 5, name: "陈静", initial: "陈", score: 87.1, medals: 7, dept: "华东区" },
+  { rank: 6, name: "张清", initial: "清", score: 82.7, medals: 6, dept: "华东区", isMe: true },
+  { rank: 7, name: "赵磊", initial: "赵", score: 80.5, medals: 5, dept: "西南区" },
+  { rank: 8, name: "孙丽", initial: "孙", score: 78.2, medals: 4, dept: "华中区" },
 ];
 
 type Tab = "calendar" | "medals" | "leaderboard";
@@ -83,6 +84,8 @@ const CommunityPage = () => {
   const [viewMonth, setViewMonth] = useState(currentMonth);
   const [lbTab, setLbTab] = useState<LeaderboardTab>("total");
   const [selectedMedal, setSelectedMedal] = useState<typeof medalCategories[0]["medals"][0] | null>(null);
+  const [selectedDept, setSelectedDept] = useState("全部部门");
+  const [deptOpen, setDeptOpen] = useState(false);
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth);
   const firstDay = getFirstDayOfMonth(viewYear, viewMonth);
@@ -98,19 +101,18 @@ const CommunityPage = () => {
     else setViewMonth(viewMonth + 1);
   };
 
-  const calendarDays = [];
+  const calendarDays: (number | null)[] = [];
   for (let i = 0; i < firstDay; i++) calendarDays.push(null);
   for (let d = 1; d <= daysInMonth; d++) calendarDays.push(d);
 
-  const totalChecked = 9;
-  const consecutiveChecked = 5;
-  const totalHours = 100;
+  const filteredLeaderboard = selectedDept === "全部部门"
+    ? leaderboard
+    : leaderboard.filter(u => u.dept === selectedDept);
 
-  const topThree = leaderboard.filter((u) => u.rank <= 3);
+  const topThree = filteredLeaderboard.filter((u) => u.rank <= 3);
 
   return (
     <div className="pb-4">
-      {/* Tab bar */}
       <div className="sticky top-0 z-10 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="flex items-center px-4 pt-3">
           {(["calendar", "medals", "leaderboard"] as Tab[]).map((tab) => (
@@ -130,7 +132,6 @@ const CommunityPage = () => {
       {/* Calendar Tab */}
       {activeTab === "calendar" && (
         <div className="px-4 pt-4 space-y-4">
-          {/* Today check-in card */}
           <Card className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-accent">
             <div>
               <h3 className="text-sm font-bold">今日打卡</h3>
@@ -141,7 +142,6 @@ const CommunityPage = () => {
             </div>
           </Card>
 
-          {/* Calendar */}
           <Card className="p-4">
             <div className="flex items-center justify-between mb-4">
               <button onClick={prevMonth}><ChevronLeft className="h-4 w-4 text-muted-foreground" /></button>
@@ -150,13 +150,11 @@ const CommunityPage = () => {
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </button>
             </div>
-
             <div className="grid grid-cols-7 gap-0 mb-2">
               {["日", "一", "二", "三", "四", "五", "六"].map((d) => (
                 <div key={d} className="text-center text-[10px] text-muted-foreground font-medium py-1">{d}</div>
               ))}
             </div>
-
             <div className="grid grid-cols-7 gap-0">
               {calendarDays.map((day, i) => {
                 if (day === null) return <div key={`empty-${i}`} className="h-10" />;
@@ -177,19 +175,18 @@ const CommunityPage = () => {
             </div>
           </Card>
 
-          {/* Stats */}
           <Card className="grid grid-cols-3 divide-x divide-border py-4">
             <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">{totalChecked}</span>
-              <span className="text-[10px] text-muted-foreground">本月打卡<span className="text-[10px]"> 天</span></span>
+              <span className="text-xl font-bold text-primary">9</span>
+              <span className="text-[10px] text-muted-foreground">本月打卡 天</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">{consecutiveChecked}</span>
-              <span className="text-[10px] text-muted-foreground">连续打卡<span className="text-[10px]"> 天</span></span>
+              <span className="text-xl font-bold text-primary">5</span>
+              <span className="text-[10px] text-muted-foreground">连续打卡 天</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xl font-bold text-primary">{totalHours}</span>
-              <span className="text-[10px] text-muted-foreground">累计学习<span className="text-[10px]"> 小时</span></span>
+              <span className="text-xl font-bold text-primary">100</span>
+              <span className="text-[10px] text-muted-foreground">累计学习 小时</span>
             </div>
           </Card>
         </div>
@@ -219,11 +216,6 @@ const CommunityPage = () => {
                     </div>
                     <span className="text-[10px] font-medium text-center leading-tight">{medal.title}</span>
                     <span className="text-[9px] text-muted-foreground text-center leading-tight">{medal.desc}</span>
-                    {!medal.earned && (
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-[9px] text-muted-foreground">
-                        {medal.desc}
-                      </span>
-                    )}
                   </button>
                 ))}
               </div>
@@ -235,59 +227,91 @@ const CommunityPage = () => {
       {/* Leaderboard Tab */}
       {activeTab === "leaderboard" && (
         <div className="px-4 pt-4 space-y-4">
-          {/* Sub tabs */}
-          <div className="flex gap-2">
-            {([["total", "总榜"], ["position", "同岗位"], ["week", "周榜"]] as [LeaderboardTab, string][]).map(([key, label]) => (
+          {/* Sub tabs + department filter */}
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2">
+              {([["total", "总榜"], ["position", "同岗位"], ["week", "周榜"]] as [LeaderboardTab, string][]).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setLbTab(key)}
+                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                    lbTab === key ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {/* Department dropdown */}
+            <div className="relative">
               <button
-                key={key}
-                onClick={() => setLbTab(key)}
-                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
-                  lbTab === key ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                }`}
+                onClick={() => setDeptOpen(!deptOpen)}
+                className="flex items-center gap-1 rounded-full border border-border px-2.5 py-1 text-[11px] text-muted-foreground"
               >
-                {label}
+                {selectedDept === "全部部门" ? "部门" : selectedDept}
+                <ChevronDown className="h-3 w-3" />
               </button>
-            ))}
+              {deptOpen && (
+                <div className="absolute right-0 top-full mt-1 z-20 w-28 rounded-xl border border-border bg-card shadow-lg py-1">
+                  {departments.map((dept) => (
+                    <button
+                      key={dept}
+                      onClick={() => { setSelectedDept(dept); setDeptOpen(false); }}
+                      className={`w-full px-3 py-2 text-left text-[11px] hover:bg-muted transition-colors ${
+                        selectedDept === dept ? "text-primary font-medium" : "text-foreground"
+                      }`}
+                    >
+                      {dept}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Podium */}
           <div className="flex items-end justify-center gap-3 pt-4 pb-2">
-            {/* 2nd place */}
-            <div className="flex flex-col items-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
-                {topThree[1]?.initial}
+            {topThree[1] && (
+              <div className="flex flex-col items-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
+                  {topThree[1].initial}
+                </div>
+                <span className="mt-1 text-[11px] font-medium">{topThree[1].name}</span>
+                <span className="text-[10px] text-muted-foreground">{topThree[1].score}分</span>
+                <div className="mt-1 flex h-16 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-slate-200 to-slate-300">
+                  <span className="text-lg font-bold text-white">2</span>
+                </div>
               </div>
-              <span className="mt-1 text-[11px] font-medium">{topThree[1]?.name}</span>
-              <div className="mt-1 flex h-16 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-slate-200 to-slate-300">
-                <span className="text-lg font-bold text-white">2</span>
+            )}
+            {topThree[0] && (
+              <div className="flex flex-col items-center">
+                <Crown className="h-5 w-5 text-amber-400 mb-1" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 text-base font-bold text-primary">
+                  {topThree[0].initial}
+                </div>
+                <span className="mt-1 text-[11px] font-semibold">{topThree[0].name}</span>
+                <span className="text-[10px] text-muted-foreground">{topThree[0].score}分</span>
+                <div className="mt-1 flex h-20 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-amber-300 to-amber-400">
+                  <span className="text-xl font-bold text-white">1</span>
+                </div>
               </div>
-            </div>
-            {/* 1st place */}
-            <div className="flex flex-col items-center">
-              <Crown className="h-5 w-5 text-amber-400 mb-1" />
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20 text-base font-bold text-primary">
-                {topThree[0]?.initial}
+            )}
+            {topThree[2] && (
+              <div className="flex flex-col items-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
+                  {topThree[2].initial}
+                </div>
+                <span className="mt-1 text-[11px] font-medium">{topThree[2].name}</span>
+                <span className="text-[10px] text-muted-foreground">{topThree[2].score}分</span>
+                <div className="mt-1 flex h-12 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-amber-600 to-amber-700">
+                  <span className="text-lg font-bold text-white">3</span>
+                </div>
               </div>
-              <span className="mt-1 text-[11px] font-semibold">{topThree[0]?.name}</span>
-              <div className="mt-1 flex h-20 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-amber-300 to-amber-400">
-                <span className="text-xl font-bold text-white">1</span>
-              </div>
-            </div>
-            {/* 3rd place */}
-            <div className="flex flex-col items-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
-                {topThree[2]?.initial}
-              </div>
-              <span className="mt-1 text-[11px] font-medium">{topThree[2]?.name}</span>
-              <div className="mt-1 flex h-12 w-20 items-center justify-center rounded-t-xl bg-gradient-to-b from-amber-600 to-amber-700">
-                <span className="text-lg font-bold text-white">3</span>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Rest of leaderboard */}
           <Card className="divide-y divide-border">
-            {leaderboard.filter((u) => u.rank > 3).map((user) => (
+            {filteredLeaderboard.filter((u) => u.rank > 3).map((user) => (
               <div
                 key={user.rank}
                 className={`flex items-center gap-3 px-4 py-3 ${user.isMe ? "bg-primary/5 border-l-2 border-l-primary" : ""}`}
@@ -301,6 +325,7 @@ const CommunityPage = () => {
                     <span className="text-xs font-medium">{user.name}</span>
                     {user.isMe && <span className="rounded-full border border-primary/30 px-1.5 py-0.5 text-[9px] text-primary">我</span>}
                   </div>
+                  <span className="text-[10px] text-muted-foreground">{user.dept}</span>
                 </div>
                 <div className="text-right">
                   <span className="text-sm font-bold">{user.score}</span>
@@ -314,7 +339,6 @@ const CommunityPage = () => {
         </div>
       )}
 
-      {/* Medal detail dialog */}
       <Dialog open={!!selectedMedal} onOpenChange={() => setSelectedMedal(null)}>
         <DialogContent className="max-w-[320px] rounded-2xl">
           <DialogHeader>
