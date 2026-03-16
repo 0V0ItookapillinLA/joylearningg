@@ -1,7 +1,9 @@
-import { ArrowLeft, Play, MapPin, CheckSquare, Target, Clock, Users } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Play, MapPin, CheckSquare, Target, Clock, Users, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import coverObjection from "@/assets/cover-objection.jpg";
 import coverPhoneSales from "@/assets/cover-phone-sales.jpg";
 import coverProduct from "@/assets/cover-product.jpg";
