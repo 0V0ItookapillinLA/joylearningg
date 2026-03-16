@@ -1,14 +1,8 @@
 import { useState } from "react";
-import { ArrowLeft, Check, Lock, Play, FileText, MessageSquare } from "lucide-react";
+import { ArrowLeft, Check, Lock, Play, FileText, MessageSquare, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { motion, AnimatePresence } from "framer-motion";
 
 type CourseItem = {
   title: string;
@@ -67,97 +61,23 @@ const levels: LevelNode[] = [
       { title: "绩效面谈对练", type: "practice", completed: false, linkId: "p5" },
     ],
   },
-  {
-    level: "P6", title: "高级销售主管", status: "locked", progress: 0,
-    courses: [
-      { title: "区域市场策略", type: "video", completed: false, linkId: "v7" },
-      { title: "KA管理指南", type: "doc", completed: false, linkId: "d6" },
-      { title: "渠道拓展对练", type: "practice", completed: false, linkId: "p6" },
-    ],
-  },
-  {
-    level: "P7", title: "销售经理", status: "locked", progress: 0,
-    courses: [
-      { title: "P&L管理精讲", type: "video", completed: false, linkId: "v8" },
-      { title: "年度规划模板", type: "doc", completed: false, linkId: "d7" },
-      { title: "团队建设对练", type: "practice", completed: false, linkId: "p7" },
-    ],
-  },
-  {
-    level: "P8", title: "高级销售经理", status: "locked", progress: 0,
-    courses: [
-      { title: "多区域管理", type: "video", completed: false, linkId: "v9" },
-      { title: "合作伙伴指南", type: "doc", completed: false, linkId: "d8" },
-      { title: "危机处理对练", type: "practice", completed: false, linkId: "p8" },
-    ],
-  },
-  {
-    level: "P9", title: "区域总监", status: "locked", progress: 0,
-    courses: [
-      { title: "组织发展战略", type: "video", completed: false, linkId: "v10" },
-      { title: "竞争战略分析", type: "doc", completed: false, linkId: "d9" },
-      { title: "战略谈判对练", type: "practice", completed: false, linkId: "p9" },
-    ],
-  },
-  {
-    level: "P10", title: "高级区域总监", status: "locked", progress: 0,
-    courses: [
-      { title: "人才梯队建设", type: "video", completed: false, linkId: "v11" },
-      { title: "品牌建设手册", type: "doc", completed: false, linkId: "d10" },
-    ],
-  },
-  {
-    level: "P11", title: "销售副总裁", status: "locked", progress: 0,
-    courses: [
-      { title: "全国战略规划", type: "video", completed: false, linkId: "v12" },
-      { title: "商业模式创新", type: "doc", completed: false, linkId: "d11" },
-    ],
-  },
-  {
-    level: "P12", title: "高级副总裁", status: "locked", progress: 0,
-    courses: [
-      { title: "并购整合实务", type: "video", completed: false, linkId: "v13" },
-      { title: "国际化战略", type: "doc", completed: false, linkId: "d12" },
-    ],
-  },
-  {
-    level: "P13", title: "执行副总裁", status: "locked", progress: 0,
-    courses: [
-      { title: "资本运作", type: "video", completed: false, linkId: "v14" },
-      { title: "生态构建指南", type: "doc", completed: false, linkId: "d13" },
-    ],
-  },
-  {
-    level: "P14", title: "首席营收官", status: "locked", progress: 0,
-    courses: [
-      { title: "数字化转型", type: "video", completed: false, linkId: "v15" },
-      { title: "全球营收战略", type: "doc", completed: false, linkId: "d14" },
-    ],
-  },
-  {
-    level: "P15", title: "首席执行官", status: "locked", progress: 0,
-    courses: [
-      { title: "企业愿景规划", type: "video", completed: false, linkId: "v16" },
-      { title: "战略联盟", type: "doc", completed: false, linkId: "d15" },
-    ],
-  },
 ];
 
-const typeIcon = {
-  video: Play,
-  doc: FileText,
-  practice: MessageSquare,
-};
-const typeLabel = {
-  video: "视频课程",
-  doc: "文档资料",
-  practice: "AI对练",
-};
+const typeIcon = { video: Play, doc: FileText, practice: MessageSquare };
+const typeLabel = { video: "视频课程", doc: "文档资料", practice: "AI对练" };
 const typeColor = {
   video: "text-blue-500 bg-blue-50",
   doc: "text-amber-600 bg-amber-50",
   practice: "text-green-600 bg-green-50",
 };
+
+const nodePositions = [
+  { left: "60%", align: "right" },
+  { left: "25%", align: "left" },
+  { left: "65%", align: "right" },
+  { left: "20%", align: "left" },
+  { left: "55%", align: "right" },
+];
 
 const LearningMapPage = () => {
   const navigate = useNavigate();
@@ -170,122 +90,193 @@ const LearningMapPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50/50 to-background">
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
-        <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
-        <h1 className="text-sm font-semibold">学习地图</h1>
+    <div className="min-h-screen relative overflow-hidden" style={{
+      background: "linear-gradient(180deg, hsl(199 89% 70%) 0%, hsl(199 89% 55%) 25%, hsl(170 60% 60%) 50%, hsl(45 70% 70%) 80%, hsl(45 60% 65%) 100%)"
+    }}>
+      {/* Header */}
+      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 py-3 bg-white/10 backdrop-blur-md">
+        <button onClick={() => navigate(-1)} className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+          <ArrowLeft className="h-5 w-5 text-white" />
+        </button>
+        <h1 className="text-sm font-semibold text-white">学习地图</h1>
       </div>
 
-      {/* Progress summary */}
-      <div className="p-4">
-        <Card className="p-4 bg-gradient-to-r from-blue-500/10 to-primary/5">
+      {/* Progress card */}
+      <div className="px-4 pt-2 pb-4">
+        <div className="rounded-2xl bg-white/90 backdrop-blur-sm p-4 shadow-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold">学习进度</span>
             <span className="text-xs font-bold text-primary">P3 · 高级销售顾问</span>
           </div>
           <Progress value={18} className="h-2 mb-1" />
-          <p className="text-[10px] text-muted-foreground">已完成 2/15 阶段，当前阶段进度 40%</p>
-        </Card>
-      </div>
-
-      {/* Path timeline */}
-      <div className="px-4 pb-8">
-        <div className="relative pl-8">
-          <div className="absolute left-[15px] top-0 bottom-0 w-0.5 bg-border" />
-
-          <div className="space-y-3">
-            {levels.map((level) => {
-              const isCompleted = level.status === "completed";
-              const isCurrent = level.status === "current";
-              const isLocked = level.status === "locked";
-
-              return (
-                <div key={level.level} className="relative">
-                  {/* Timeline node */}
-                  <div className={`absolute -left-8 top-3 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold border-2 ${
-                    isCompleted ? "bg-green-500 border-green-500 text-white" :
-                    isCurrent ? "bg-primary border-primary text-primary-foreground" :
-                    "bg-muted border-border text-muted-foreground"
-                  }`}>
-                    {isCompleted ? <Check className="h-3.5 w-3.5" /> : level.level}
-                  </div>
-
-                  <Card
-                    className={`p-3.5 cursor-pointer transition-all ${isLocked ? "opacity-40" : "hover:shadow-md"} ${isCurrent ? "border-primary/40 shadow-sm" : ""}`}
-                    onClick={() => !isLocked && setSelected(level)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold text-muted-foreground">{level.level}</span>
-                        <h4 className="text-xs font-bold">{level.title}</h4>
-                        {isCurrent && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[8px] font-semibold text-primary">当前</span>}
-                      </div>
-                      {isLocked ? (
-                        <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                      ) : (
-                        <span className="text-[10px] text-primary font-medium">{level.courses.length}门课程 ›</span>
-                      )}
-                    </div>
-                    {!isLocked && level.progress > 0 && (
-                      <div className="flex items-center gap-2 mt-2">
-                        <Progress value={level.progress} className="h-1 flex-1" />
-                        <span className="text-[9px] text-muted-foreground">{level.progress}%</span>
-                      </div>
-                    )}
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
+          <p className="text-[10px] text-muted-foreground">已完成 2/5 阶段，当前阶段进度 40%</p>
         </div>
       </div>
 
-      {/* Course detail dialog */}
-      <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
-        <DialogContent className="max-w-[360px] rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-[10px] font-bold">
-                {selected?.level}
-              </span>
-              {selected?.title}
-            </DialogTitle>
-          </DialogHeader>
-          {selected && (
-            <div className="space-y-2 mt-1">
-              {selected.progress > 0 && (
-                <div className="flex items-center gap-2 mb-3">
-                  <Progress value={selected.progress} className="h-1.5 flex-1" />
-                  <span className="text-xs font-medium text-primary">{selected.progress}%</span>
+      {/* Map with island nodes */}
+      <div className="relative px-4 pb-20" style={{ minHeight: levels.length * 160 }}>
+        {/* Path */}
+        <svg className="absolute inset-0 w-full h-full" style={{ minHeight: levels.length * 160 }}>
+          <defs>
+            <linearGradient id="mapPath" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.7)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0.2)" />
+            </linearGradient>
+          </defs>
+          {levels.map((_, i) => {
+            if (i === levels.length - 1) return null;
+            const y1 = i * 160 + 80;
+            const y2 = (i + 1) * 160 + 80;
+            const pos1 = nodePositions[i % nodePositions.length];
+            const pos2 = nodePositions[(i + 1) % nodePositions.length];
+            const x1 = pos1.align === "left" ? 90 : 260;
+            const x2 = pos2.align === "left" ? 90 : 260;
+            const midY = (y1 + y2) / 2;
+            return (
+              <path
+                key={i}
+                d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
+                fill="none"
+                stroke="url(#mapPath)"
+                strokeWidth="4"
+                strokeDasharray={levels[i + 1].status === "locked" ? "8 8" : "none"}
+              />
+            );
+          })}
+        </svg>
+
+        {/* Nodes */}
+        {levels.map((level, i) => {
+          const isCompleted = level.status === "completed";
+          const isCurrent = level.status === "current";
+          const isLocked = level.status === "locked";
+          const pos = nodePositions[i % nodePositions.length];
+
+          return (
+            <motion.div
+              key={level.level}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="relative"
+              style={{ height: 160, paddingTop: 30 }}
+            >
+              <div
+                className={`absolute cursor-pointer transition-transform hover:scale-105 ${isLocked ? "opacity-50" : ""}`}
+                style={{ left: pos.left, transform: "translateX(-50%)" }}
+                onClick={() => !isLocked && setSelected(level)}
+              >
+                <div className={`relative flex h-16 w-16 items-center justify-center rounded-full shadow-xl border-4 ${
+                  isCompleted ? "bg-gradient-to-br from-green-400 to-green-600 border-green-300" :
+                  isCurrent ? "bg-gradient-to-br from-primary to-blue-600 border-blue-300" :
+                  "bg-gradient-to-br from-gray-300 to-gray-400 border-gray-200"
+                }`}>
+                  {isCompleted ? (
+                    <Check className="h-6 w-6 text-white" />
+                  ) : isLocked ? (
+                    <Lock className="h-5 w-5 text-white/70" />
+                  ) : (
+                    <span className="text-white font-black text-sm">{level.level}</span>
+                  )}
+                  {isCompleted && (
+                    <div className="absolute -top-2 -right-2">
+                      <span className="text-lg">⭐</span>
+                    </div>
+                  )}
+                  {isCurrent && (
+                    <motion.div
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ repeat: Infinity, duration: 2 }}
+                      className="absolute -inset-2 rounded-full border-2 border-blue-300/50"
+                    />
+                  )}
                 </div>
-              )}
-              {selected.courses.map((course, i) => {
-                const Icon = typeIcon[course.type];
-                return (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 cursor-pointer hover:bg-muted transition-colors"
-                    onClick={() => { setSelected(null); handleCourseClick(course); }}
-                  >
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${typeColor[course.type]}`}>
-                      <Icon className="h-4 w-4" />
+
+                <div className={`mt-2 rounded-xl px-3 py-2 shadow-md min-w-[120px] text-center ${
+                  isCompleted ? "bg-green-50 border border-green-200" :
+                  isCurrent ? "bg-white border border-primary/30" :
+                  "bg-white/60 border border-gray-200"
+                }`}>
+                  <p className="text-[10px] font-bold text-muted-foreground">{level.level}</p>
+                  <p className="text-xs font-bold text-foreground">{level.title}</p>
+                  {isCurrent && (
+                    <div className="mt-1">
+                      <Progress value={level.progress} className="h-1" />
+                      <p className="text-[9px] text-primary mt-0.5">{level.progress}% · {level.courses.length}门课程</p>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">{course.title}</p>
-                      <p className="text-[9px] text-muted-foreground">{typeLabel[course.type]}</p>
-                    </div>
-                    {course.completed ? (
-                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-medium text-green-600">已学</span>
-                    ) : (
-                      <span className="text-[10px] text-primary font-medium">去学习 ›</span>
-                    )}
+                  )}
+                  {isCompleted && <p className="text-[9px] text-green-600 font-medium mt-0.5">✅ 已完成</p>}
+                  {isLocked && <p className="text-[9px] text-muted-foreground mt-0.5">🔒 未解锁</p>}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Decorative */}
+      <div className="fixed bottom-4 left-3 text-2xl opacity-50">🌴</div>
+      <div className="fixed bottom-16 right-4 text-xl opacity-40">🏝️</div>
+
+      {/* Course detail sheet */}
+      <AnimatePresence>
+        {selected && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+              onClick={() => setSelected(null)}
+            />
+            <motion.div
+              initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
+              style={{ maxHeight: "70vh" }}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-[10px] font-bold">
+                    {selected.level}
+                  </span>
+                  <h3 className="text-sm font-semibold">{selected.title}</h3>
+                </div>
+                <button onClick={() => setSelected(null)}><X className="h-5 w-5 text-muted-foreground" /></button>
+              </div>
+              <div className="overflow-y-auto p-4 space-y-2" style={{ maxHeight: "calc(70vh - 56px)" }}>
+                {selected.progress > 0 && (
+                  <div className="flex items-center gap-2 mb-3">
+                    <Progress value={selected.progress} className="h-1.5 flex-1" />
+                    <span className="text-xs font-medium text-primary">{selected.progress}%</span>
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+                )}
+                {selected.courses.map((course, i) => {
+                  const Icon = typeIcon[course.type];
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 cursor-pointer hover:bg-muted transition-colors"
+                      onClick={() => { setSelected(null); handleCourseClick(course); }}
+                    >
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${typeColor[course.type]}`}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium truncate">{course.title}</p>
+                        <p className="text-[9px] text-muted-foreground">{typeLabel[course.type]}</p>
+                      </div>
+                      {course.completed ? (
+                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-medium text-green-600">已学</span>
+                      ) : (
+                        <span className="text-[10px] text-primary font-medium">去学习 ›</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
