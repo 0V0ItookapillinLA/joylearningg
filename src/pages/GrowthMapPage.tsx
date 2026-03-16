@@ -1,79 +1,117 @@
-import { ArrowLeft, Lock, Check, MapPin } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
-const userInfo = {
-  name: "李明",
-  currentRole: "销售顾问",
-  nextRole: "高级销售顾问",
-  overallProgress: 25,
-  currentProgress: 100,
-  nextProgress: 50,
-};
-
-const stages = [
+const levels = [
   {
-    title: "服务员",
-    weeks: 32,
+    level: "P1",
+    title: "初级销售",
     status: "completed" as const,
-    progress: 100,
-    color: "from-green-400 to-green-500",
-    skills: ["产品基础知识", "电话礼仪", "CRM系统操作"],
+    professional: ["产品基础知识", "销售话术入门", "客户接待流程"],
+    general: ["职业素养", "时间管理", "沟通基础"],
   },
   {
-    title: "训练员",
-    weeks: 24,
+    level: "P2",
+    title: "销售顾问",
     status: "completed" as const,
-    progress: 100,
-    color: "from-green-400 to-green-500",
-    skills: ["客户需求分析", "异议处理", "FABE法则"],
+    professional: ["需求分析技巧", "FABE法则", "CRM系统操作"],
+    general: ["团队协作", "情绪管理", "目标设定"],
   },
   {
-    title: "门店主管",
-    weeks: 28,
+    level: "P3",
+    title: "高级销售顾问",
     status: "current" as const,
-    progress: 50,
-    color: "from-primary to-blue-500",
-    skills: ["团队管理基础", "绩效辅导", "日常运营"],
-    currentTask: "高效工作--时间管理与效率提升",
-    taskWeeks: 5,
-    taskUsed: 3,
-    taskProgress: 15,
+    professional: ["异议处理策略", "竞品分析", "大客户开发"],
+    general: ["项目管理", "演讲表达", "批判思维"],
   },
   {
-    title: "门店店长",
-    weeks: 28,
+    level: "P4",
+    title: "资深销售顾问",
     status: "locked" as const,
-    progress: 0,
-    color: "from-slate-300 to-slate-400",
-    skills: ["门店P&L管理", "人才培养", "客户体验优化"],
+    professional: ["复杂谈判技巧", "方案式销售", "行业洞察"],
+    general: ["领导力基础", "跨部门协作", "商业思维"],
   },
   {
-    title: "区域督导",
-    weeks: 36,
+    level: "P5",
+    title: "销售主管",
     status: "locked" as const,
-    progress: 0,
-    color: "from-slate-300 to-slate-400",
-    skills: ["多门店管理", "战略规划", "组织发展"],
+    professional: ["团队销售管理", "销售漏斗优化", "绩效辅导"],
+    general: ["人才选拔", "冲突管理", "教练技术"],
   },
   {
-    title: "大区经理",
-    weeks: 28,
+    level: "P6",
+    title: "高级销售主管",
     status: "locked" as const,
-    progress: 0,
-    color: "from-slate-300 to-slate-400",
-    skills: ["区域战略", "预算管理", "跨区协作"],
+    professional: ["区域市场策略", "KA客户管理", "渠道拓展"],
+    general: ["战略思维", "数据分析", "变革管理"],
   },
   {
-    title: "高级营运总监",
-    weeks: 20,
+    level: "P7",
+    title: "销售经理",
     status: "locked" as const,
-    progress: 0,
-    color: "from-slate-300 to-slate-400",
-    skills: ["全国运营", "商业模式", "战略投资"],
+    professional: ["P&L管理", "年度销售规划", "团队建设"],
+    general: ["组织设计", "文化塑造", "财务分析"],
+  },
+  {
+    level: "P8",
+    title: "高级销售经理",
+    status: "locked" as const,
+    professional: ["多区域管理", "大客户战略", "合作伙伴生态"],
+    general: ["高管沟通", "危机管理", "创新思维"],
+  },
+  {
+    level: "P9",
+    title: "区域总监",
+    status: "locked" as const,
+    professional: ["区域P&L", "组织发展", "市场竞争战略"],
+    general: ["影响力", "系统思维", "商业谈判"],
+  },
+  {
+    level: "P10",
+    title: "高级区域总监",
+    status: "locked" as const,
+    professional: ["多区战略协同", "人才梯队建设", "品牌建设"],
+    general: ["战略规划", "公共演讲", "资源整合"],
+  },
+  {
+    level: "P11",
+    title: "销售副总裁",
+    status: "locked" as const,
+    professional: ["全国销售战略", "商业模式创新", "战略合作"],
+    general: ["愿景领导", "董事会沟通", "投资决策"],
+  },
+  {
+    level: "P12",
+    title: "高级副总裁",
+    status: "locked" as const,
+    professional: ["集团业务规划", "并购整合", "国际化布局"],
+    general: ["全球视野", "政商关系", "企业治理"],
+  },
+  {
+    level: "P13",
+    title: "执行副总裁",
+    status: "locked" as const,
+    professional: ["集团战略制定", "资本运作", "生态构建"],
+    general: ["哲学思维", "社会责任", "行业引领"],
+  },
+  {
+    level: "P14",
+    title: "首席营收官",
+    status: "locked" as const,
+    professional: ["全球营收战略", "商业生态系统", "数字化转型"],
+    general: ["前瞻思维", "组织变革", "价值创造"],
+  },
+  {
+    level: "P15",
+    title: "首席执行官",
+    status: "locked" as const,
+    professional: ["企业愿景规划", "资本市场运营", "战略联盟"],
+    general: ["使命驱动", "全局领导", "传承与创新"],
   },
 ];
+
+const currentIndex = levels.findIndex((l) => l.status === "current");
 
 const GrowthMapPage = () => {
   const navigate = useNavigate();
@@ -82,109 +120,81 @@ const GrowthMapPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
       <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
         <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
-        <h1 className="text-sm font-semibold">成长路径</h1>
+        <h1 className="text-sm font-semibold">成长地图</h1>
       </div>
 
-      <div className="p-4 space-y-4">
-        {/* User Card */}
+      {/* Current level summary */}
+      <div className="p-4">
         <Card className="p-4 bg-gradient-to-r from-primary/10 to-accent">
           <div className="flex items-center gap-3 mb-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-lg font-bold text-primary">李</div>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground text-lg font-black">
+              {levels[currentIndex].level}
+            </div>
             <div>
-              <h3 className="text-sm font-bold">{userInfo.name}</h3>
-              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                <span>当前岗位：{userInfo.currentRole}</span>
-                <span>上级岗位：{userInfo.nextRole}</span>
-              </div>
+              <h3 className="text-sm font-bold">{levels[currentIndex].title}</h3>
+              <p className="text-[10px] text-muted-foreground">当前职级 · 晋升进度 45%</p>
             </div>
           </div>
-          <div className="mb-2">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-medium text-primary">我的岗位成长进度</span>
-              <span className="text-xs font-bold text-primary">{userInfo.overallProgress}%</span>
-            </div>
-            <Progress value={userInfo.overallProgress} className="h-2" />
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-3">
-            <div className="rounded-xl bg-card p-2.5 text-center">
-              <p className="text-[10px] text-muted-foreground mb-1">当前岗位地图进度</p>
-              <Progress value={userInfo.currentProgress} className="h-1.5 mb-1" />
-              <span className="rounded-full bg-green-100 px-2 py-0.5 text-[9px] font-medium text-green-600">已完成</span>
-            </div>
-            <div className="rounded-xl bg-card p-2.5 text-center">
-              <p className="text-[10px] text-muted-foreground mb-1">上级岗位地图进度</p>
-              <Progress value={userInfo.nextProgress} className="h-1.5 mb-1" />
-              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-medium text-primary">进入学习</span>
-            </div>
-          </div>
+          <Progress value={45} className="h-2" />
         </Card>
+      </div>
 
-        {/* Growth Path - Visual pillars */}
-        <div className="relative pt-4">
-          {/* Connecting line */}
-          <div className="absolute left-1/2 top-8 bottom-0 w-0.5 bg-border -translate-x-1/2" />
+      {/* Vertical timeline */}
+      <div className="px-4 pb-8">
+        <div className="relative pl-8">
+          {/* Vertical line */}
+          <div className="absolute left-[15px] top-0 bottom-0 w-0.5 bg-border" />
 
-          <div className="space-y-6">
-            {stages.map((stage, i) => {
-              const isLeft = i % 2 === 0;
+          <div className="space-y-4">
+            {levels.map((level, i) => {
+              const isCompleted = level.status === "completed";
+              const isCurrent = level.status === "current";
+              const isLocked = level.status === "locked";
+
               return (
-                <div key={i} className="relative">
-                  {/* Center node */}
-                  <div className="absolute left-1/2 top-0 -translate-x-1/2 z-10">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 bg-card ${
-                      stage.status === "completed" ? "border-green-400" :
-                      stage.status === "current" ? "border-primary" : "border-border"
-                    }`}>
-                      {stage.status === "completed" ? (
-                        <Check className="h-5 w-5 text-green-500" />
-                      ) : stage.status === "current" ? (
-                        <MapPin className="h-5 w-5 text-primary" />
-                      ) : (
-                        <Lock className="h-4 w-4 text-muted-foreground" />
-                      )}
-                    </div>
-                    <div className="text-center mt-1">
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-medium text-primary">{stage.weeks}周</span>
-                    </div>
+                <div key={level.level} className="relative">
+                  {/* Node on timeline */}
+                  <div className={`absolute -left-8 top-3 flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold border-2 ${
+                    isCompleted ? "bg-green-500 border-green-500 text-white" :
+                    isCurrent ? "bg-primary border-primary text-primary-foreground animate-pulse" :
+                    "bg-muted border-border text-muted-foreground"
+                  }`}>
+                    {level.level}
                   </div>
 
-                  {/* Content card */}
-                  <div className={`${isLeft ? "pr-[55%]" : "pl-[55%]"} pt-1`}>
-                    <Card className={`p-3 ${stage.status === "locked" ? "opacity-50" : ""}`}>
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <div className={`h-3 w-3 rounded-full bg-gradient-to-b ${stage.color}`} />
-                        <h4 className="text-xs font-bold">{stage.title}</h4>
-                        {stage.status === "current" && (
-                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[8px] font-medium text-primary">当前</span>
+                  <Card className={`p-3.5 transition-all ${isLocked ? "opacity-40" : ""} ${isCurrent ? "border-primary/40 shadow-md" : ""}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-xs font-bold">{level.title}</h4>
+                        {isCurrent && (
+                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[8px] font-semibold text-primary">当前</span>
+                        )}
+                        {isCompleted && (
+                          <span className="rounded-full bg-green-100 px-2 py-0.5 text-[8px] font-semibold text-green-600">已达成</span>
                         )}
                       </div>
-                      {stage.progress > 0 && stage.status !== "locked" && (
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <Progress value={stage.progress} className="h-1 flex-1" />
-                          <span className="text-[9px] text-muted-foreground">{stage.progress}%</span>
-                        </div>
-                      )}
-                      <div className="flex flex-wrap gap-1">
-                        {stage.skills.map((skill) => (
-                          <span key={skill} className="rounded bg-muted px-1.5 py-0.5 text-[8px] text-muted-foreground">{skill}</span>
-                        ))}
-                      </div>
-                    </Card>
+                      {!isLocked && <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />}
+                    </div>
 
-                    {/* Current task popup */}
-                    {stage.currentTask && (
-                      <Card className="mt-2 p-3 border-primary/30 bg-gradient-to-r from-primary/5 to-card">
-                        <h5 className="text-[11px] font-semibold mb-1">{stage.currentTask}</h5>
-                        <p className="text-[9px] text-muted-foreground mb-1.5">
-                          建议完成周期：{stage.taskWeeks}周，当前已用{stage.taskUsed}周
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <Progress value={stage.taskProgress} className="h-1 flex-1" />
-                          <span className="text-[9px] font-medium text-primary">{stage.taskProgress}%</span>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-[9px] font-semibold text-primary mb-1">专业能力</p>
+                        <div className="flex flex-wrap gap-1">
+                          {level.professional.map((s) => (
+                            <span key={s} className="rounded-md bg-primary/8 px-1.5 py-0.5 text-[8px] text-primary font-medium">{s}</span>
+                          ))}
                         </div>
-                      </Card>
-                    )}
-                  </div>
+                      </div>
+                      <div>
+                        <p className="text-[9px] font-semibold text-muted-foreground mb-1">通用能力</p>
+                        <div className="flex flex-wrap gap-1">
+                          {level.general.map((s) => (
+                            <span key={s} className="rounded-md bg-muted px-1.5 py-0.5 text-[8px] text-muted-foreground">{s}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
               );
             })}
