@@ -176,8 +176,8 @@ const HomePage = () => {
               className="w-44 shrink-0 cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
               onClick={() => navigate(`/practice-detail/${p.id}`)}
             >
-              <div className="flex h-20 items-center justify-center bg-gradient-to-br from-primary/5 to-accent/50">
-                <Target className="h-8 w-8 text-primary/40" />
+              <div className="relative h-24 overflow-hidden">
+                <img src={p.cover} alt={p.title} className="h-full w-full object-cover" />
               </div>
               <div className="p-3">
                 <div className="mb-1 flex items-center gap-1.5">

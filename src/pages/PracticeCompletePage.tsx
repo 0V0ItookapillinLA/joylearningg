@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trophy, Star, X } from "lucide-react";
+import { Trophy, Star, X, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,7 +20,14 @@ const PracticeCompletePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative">
+      {/* Fixed back button */}
+      <div className="fixed top-0 left-0 right-0 z-20 mx-auto max-w-[430px]">
+        <button onClick={() => navigate("/")} className="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-muted/80 backdrop-blur-sm shadow">
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+      </div>
+
       {/* Trophy icon */}
       <motion.div
         initial={{ scale: 0 }}
@@ -73,7 +80,7 @@ const PracticeCompletePage = () => {
         </Button>
         <Button
           className="flex-1 h-12 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-primary/80"
-          onClick={() => navigate("/practice-review")}
+          onClick={() => navigate("/practice-review", { replace: true })}
         >
           查看报告
         </Button>
@@ -112,7 +119,6 @@ const PracticeCompletePage = () => {
                 ) : (
                   <>
                     <div className="mb-1">
-                      <h4 className="text-sm font-bold">Hello</h4>
                       <p className="text-xs text-muted-foreground mt-0.5">请为本次练习体验打分吧~</p>
                     </div>
 

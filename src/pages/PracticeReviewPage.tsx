@@ -357,7 +357,7 @@ const PracticeReviewPage = () => {
   return (
     <div>
       <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
-        <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
+        <button onClick={() => navigate("/profile")}><ArrowLeft className="h-5 w-5" /></button>
         <h1 className="text-sm font-semibold">练习复盘</h1>
       </div>
       <div className="p-4 space-y-2">
