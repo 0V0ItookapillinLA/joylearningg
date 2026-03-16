@@ -58,20 +58,20 @@ const PracticeSessionPage = () => {
     navigate("/practice-complete");
   };
 
-  // Guide bottom sheet
+  // Guide bottom sheet — within mobile container
   const GuideSheet = () => (
     <AnimatePresence>
       {showGuide && (
         <>
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
+            className="absolute inset-0 z-[60] bg-foreground/30 backdrop-blur-sm"
             onClick={() => setShowGuide(false)}
           />
           <motion.div
             initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-[70] mx-auto max-w-[430px] rounded-t-[24px] bg-card shadow-2xl"
+            className="absolute bottom-0 left-0 right-0 z-[70] rounded-t-[24px] bg-card shadow-2xl"
             style={{ maxHeight: "60vh" }}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
