@@ -10,7 +10,7 @@ const practiceDetail = {
   user: "用户3829_8wq",
   avatar: "🧑",
   role: "舍不得扔东西的女孩",
-  roleDesc: "AI当事人 — 习惯把几乎所有可能"以后会用到"的...",
+  roleDesc: 'AI当事人 — 习惯把几乎所有可能"以后会用到"的...',
   caseIntro: "来访者：大概两周前吧。咨询师：你在这里租房有多久了？",
   conversation: [
     { role: "user" as const, text: "你好，有什么可以帮到你？" },
