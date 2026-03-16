@@ -40,10 +40,10 @@ const courses = [
 ];
 
 const practices = [
-  { id: 1, title: "客户投诉处理", tag: "自由对话", difficulty: "中级", times: 1234 },
-  { id: 2, title: "首次电话沟通", tag: "固定剧本", difficulty: "初级", times: 892 },
-  { id: 3, title: "价格谈判实战", tag: "文本对练", difficulty: "高级", times: 567 },
-  { id: 4, title: "产品演示模拟", tag: "自由对话", difficulty: "中级", times: 345 },
+  { id: 1, title: "客户投诉处理", tag: "自由对话", difficulty: "中级", times: 1234, cover: practiceComplaint },
+  { id: 2, title: "首次电话沟通", tag: "固定剧本", difficulty: "初级", times: 892, cover: practicePhone },
+  { id: 3, title: "价格谈判实战", tag: "文本对练", difficulty: "高级", times: 567, cover: practiceNegotiation },
+  { id: 4, title: "产品演示模拟", tag: "自由对话", difficulty: "中级", times: 345, cover: practiceDemo },
 ];
 
 const roles = [
