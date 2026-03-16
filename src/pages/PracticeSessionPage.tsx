@@ -37,15 +37,23 @@ const PracticeSessionPage = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "text";
+  const scriptMode = searchParams.get("script") === "true";
   const [messages, setMessages] = useState(mockMessages);
   const [input, setInput] = useState("");
   const [recording, setRecording] = useState(false);
   const [showEndDialog, setShowEndDialog] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [currentAct, setCurrentAct] = useState(1);
 
   const role = roleInfo[id || "1"] || roleInfo["1"];
   const isVideoMode = mode === "video";
+
+  const actInfo: Record<number, { title: string; points: string[] }> = {
+    1: { title: "第一幕：安抚情绪", points: ["表达对客户的理解和关心", "使用共情话术缓解对方情绪", "避免争论对错"] },
+    2: { title: "第二幕：了解问题", points: ["通过提问了解事情经过", "确认问题的具体细节", "让客户感到被重视"] },
+    3: { title: "第三幕：提供方案", points: ["给出具体的解决方案", "征求客户的意见", "确认客户是否满意"] },
+  };
 
   const sendMessage = () => {
     if (!input.trim()) return;
