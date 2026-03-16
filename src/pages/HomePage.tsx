@@ -14,6 +14,10 @@ import coverObjection from "@/assets/cover-objection.jpg";
 import coverPhoneSales from "@/assets/cover-phone-sales.jpg";
 import coverProduct from "@/assets/cover-product.jpg";
 import coverNegotiation from "@/assets/cover-negotiation.jpg";
+import practiceComplaint from "@/assets/practice-complaint.jpg";
+import practicePhone from "@/assets/practice-phone.jpg";
+import practiceNegotiation from "@/assets/practice-negotiation.jpg";
+import practiceDemo from "@/assets/practice-demo.jpg";
 
 const banners = [
   { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1 },
