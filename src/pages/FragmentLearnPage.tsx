@@ -23,6 +23,7 @@ const FragmentLearnPage = () => {
   const navigate = useNavigate();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [liked, setLiked] = useState<number[]>([]);
+  const [bookmarked, setBookmarked] = useState<number[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState(mockComments);
