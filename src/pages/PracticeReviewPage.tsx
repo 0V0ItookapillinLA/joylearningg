@@ -380,6 +380,30 @@ const PracticeReviewPage = () => {
             返回列表
           </button>
         </div>
+
+        {/* Publish confirmation dialog */}
+        <AlertDialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>
+          <AlertDialogContent className="mx-auto max-w-[340px] rounded-2xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-sm">发布到公开对练</AlertDialogTitle>
+              <AlertDialogDescription className="text-xs">
+                确认将本次练习记录发布到公开对练广场？发布后所有用户均可查看您的练习内容和评分。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex-row gap-2">
+              <AlertDialogCancel className="flex-1 mt-0 rounded-xl text-xs">取消</AlertDialogCancel>
+              <AlertDialogAction
+                className="flex-1 rounded-xl text-xs"
+                onClick={() => {
+                  setShowPublishDialog(false);
+                  navigate("/community");
+                }}
+              >
+                确认发布
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   }

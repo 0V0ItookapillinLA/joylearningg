@@ -88,6 +88,13 @@ const FragmentLearnPage = () => {
                 <MessageCircle className="h-7 w-7 text-white" />
                 <span className="text-[10px] text-white">{v.comments}</span>
               </button>
+              <button
+                onClick={() => setBookmarked(prev => prev.includes(v.id) ? prev.filter(id => id !== v.id) : [...prev, v.id])}
+                className="flex flex-col items-center gap-1"
+              >
+                <Bookmark className={`h-7 w-7 ${bookmarked.includes(v.id) ? "fill-yellow-400 text-yellow-400" : "text-white"}`} />
+                <span className="text-[10px] text-white">收藏</span>
+              </button>
             </div>
 
             {/* Bottom info */}
