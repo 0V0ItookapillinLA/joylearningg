@@ -63,6 +63,7 @@ const App = () => (
           <Route path="/comprehensive-eval" element={<ComprehensiveEvalPage />} />
           <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
           <Route path="/plan/:id" element={<PlanDetailPage />} />
+          <Route path="/my-content" element={<MyContentPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
