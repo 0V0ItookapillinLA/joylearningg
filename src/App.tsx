@@ -27,6 +27,7 @@ import VideoPlayerPage from "@/pages/VideoPlayerPage";
 import DocViewerPage from "@/pages/DocViewerPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
 import MyContentPage from "@/pages/MyContentPage";
+import RoleDetailPage from "@/pages/RoleDetailPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
