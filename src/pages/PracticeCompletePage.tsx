@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trophy, Star, X, ArrowLeft } from "lucide-react";
+import { CheckCircle2, Star, X, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -10,6 +10,12 @@ const PracticeCompletePage = () => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [reportReady, setReportReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setReportReady(true), 2500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmitFeedback = () => {
     setSubmitted(true);
@@ -28,39 +34,26 @@ const PracticeCompletePage = () => {
         </button>
       </div>
 
-      {/* Trophy icon */}
+      {/* Check icon */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", damping: 15, stiffness: 200, delay: 0.1 }}
-        className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg"
+        className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center"
       >
-        <Trophy className="h-10 w-10 text-primary-foreground" />
-      </motion.div>
-
-      {/* Score */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-6 text-center"
-      >
-        <div className="flex items-end justify-center gap-1">
-          <span className="text-5xl font-bold text-primary">85</span>
-          <span className="text-lg text-muted-foreground mb-1">分</span>
-        </div>
+        <CheckCircle2 className="h-10 w-10 text-primary" />
       </motion.div>
 
       {/* Congrats text */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.45 }}
-        className="mt-4 text-center"
+        transition={{ delay: 0.3 }}
+        className="mt-6 text-center"
       >
-        <h1 className="text-lg font-bold">🎉 恭喜您完成本次练习</h1>
+        <h1 className="text-lg font-bold">恭喜完成练习 🎉</h1>
         <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-          AI已为您生成了详细的练习报告<br />包含会话分析和改进建议
+          AI已为您生成详细的练习报告
         </p>
       </motion.div>
 
@@ -76,13 +69,21 @@ const PracticeCompletePage = () => {
           className="flex-1 h-12 rounded-full text-sm font-medium"
           onClick={() => setShowFeedback(true)}
         >
-          评价反馈
+          满意度反馈
         </Button>
         <Button
           className="flex-1 h-12 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-primary/80"
+          disabled={!reportReady}
           onClick={() => navigate("/practice-review", { replace: true })}
         >
-          查看报告
+          {reportReady ? (
+            "查看报告"
+          ) : (
+            <span className="flex items-center gap-1.5">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              报告生成中
+            </span>
+          )}
         </Button>
       </motion.div>
 
