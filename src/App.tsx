@@ -26,6 +26,7 @@ import CourseDetailPage from "@/pages/CourseDetailPage";
 import VideoPlayerPage from "@/pages/VideoPlayerPage";
 import DocViewerPage from "@/pages/DocViewerPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
+import MyContentPage from "@/pages/MyContentPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
