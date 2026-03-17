@@ -136,6 +136,7 @@ const PracticeReviewPage = () => {
   const detailParam = searchParams.get("detail");
   const [selectedId, setSelectedId] = useState<number | null>(detailParam ? Number(detailParam) : null);
   const [expandedSegment, setExpandedSegment] = useState<number | null>(null);
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
   const selected = practiceList.find((p) => p.id === selectedId);
 
   const errorCount = dialogueSegments.filter(s => s.label === "error").length;
