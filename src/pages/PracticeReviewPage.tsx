@@ -139,18 +139,43 @@ const PracticeReviewPage = () => {
         </div>
 
         <div className="p-4 space-y-5">
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] text-muted-foreground">⏱ 耗时 {selected.duration}</span>
-          </div>
+          {/* Top card: tags + title + buttons + score */}
+          <Card className="p-4 space-y-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 text-[10px] font-medium text-primary">考试</span>
+                  <span className="rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 text-[10px] font-medium text-primary">{selected.mode}</span>
+                </div>
+                <h2 className="text-sm font-bold">{selected.scenario}</h2>
+                <p className="text-[11px] text-muted-foreground mt-1">⏱ 时长 {selected.duration}</p>
+              </div>
+              <button
+                onClick={() => navigate("/practice")}
+                className="shrink-0 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm"
+              >
+                🎯 再次练习
+              </button>
+            </div>
 
-          <Card className="p-4 flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 shrink-0">
-              <span className="text-2xl font-bold text-primary">{selected.score}</span>
+            {/* Score section */}
+            <div className="flex items-center gap-4 rounded-xl bg-muted/50 p-3">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shrink-0">
+                <span className="text-xl font-bold text-primary-foreground">{selected.score}</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-bold">AI 综合评分</h3>
+                <p className="text-[10px] text-muted-foreground mt-0.5">沟通能力强，有团队领导力</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-sm font-bold">AI 综合评分</h3>
-              <p className="text-[10px] text-muted-foreground mt-0.5">沟通能力强，但抗压能力有待提升</p>
-            </div>
+
+            {/* Publish button */}
+            <button
+              onClick={() => alert("已发布到公开对练！")}
+              className="w-full rounded-xl border border-primary/30 bg-primary/5 py-2.5 text-xs font-medium text-primary"
+            >
+              📤 发布到公开对练
+            </button>
           </Card>
 
           <Card className="p-4">
