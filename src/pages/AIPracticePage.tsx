@@ -63,7 +63,7 @@ const AIPracticePage = () => {
     <div className="min-h-screen bg-background">
       <div className="sticky top-0 z-10 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="flex items-center gap-3 px-4 py-3">
-          <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
+          <button onClick={() => navigate("/")}><ArrowLeft className="h-5 w-5" /></button>
           <h1 className="text-sm font-semibold">AI 对练</h1>
           <button className="ml-auto"><Search className="h-4.5 w-4.5 text-muted-foreground" /></button>
         </div>

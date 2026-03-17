@@ -93,7 +93,7 @@ const PracticeDetailPage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Fixed back button */}
       <div className="fixed top-0 left-0 right-0 z-20 mx-auto max-w-[430px]">
-        <button onClick={() => navigate("/practice?tab=0")} className="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow">
+        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow">
           <ArrowLeft className="h-4 w-4" />
         </button>
       </div>

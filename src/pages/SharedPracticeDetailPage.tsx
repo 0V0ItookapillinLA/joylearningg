@@ -66,88 +66,88 @@ const SharedPracticeDetailPage = () => {
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
+    <div className="fixed inset-0 mx-auto max-w-[430px] flex flex-col bg-background">
+      {/* Fixed header */}
+      <div className="shrink-0 flex items-center gap-3 bg-card/95 backdrop-blur-md px-4 py-3 border-b border-border">
         <button onClick={() => navigate(-1)}><ArrowLeft className="h-5 w-5" /></button>
         <h1 className="text-sm font-semibold">对练分享详情</h1>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
-        <div className="px-4 pt-4">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-2xl">{practiceDetail.avatar}</span>
-            <span className="text-sm font-medium">{practiceDetail.user}</span>
-            <span className={`ml-auto rounded-full px-2 py-0.5 text-[9px] font-medium ${tagColor[practiceDetail.tag]}`}>{practiceDetail.tag}</span>
-          </div>
-
-          <Card className="mb-3 p-3">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <span className="text-xs font-medium">{practiceDetail.role}</span>
-                <span className="ml-2 text-[10px] text-muted-foreground">AI角色</span>
-              </div>
-              <button
-                className="rounded-full bg-primary px-3 py-1 text-[11px] text-primary-foreground font-medium"
-                onClick={() => navigate(`/practice-detail/${practiceDetail.practiceId}`)}
-              >
-                去对练 &gt;
-              </button>
-            </div>
-            <p className="text-[11px] text-muted-foreground line-clamp-2">{practiceDetail.roleDesc}</p>
-          </Card>
-
-          <Card className="mb-4 border-l-2 border-l-primary p-3">
-            <h4 className="text-xs font-semibold text-primary mb-1">📋 案例简介</h4>
-            <p className="text-[11px] text-muted-foreground">{practiceDetail.caseIntro}</p>
-          </Card>
-
-          {/* Only like + collect + comment */}
-          <div className="flex items-center justify-around py-3 border-y border-border mb-3">
-            <button
-              className={`flex flex-col items-center gap-0.5 ${liked ? "text-destructive" : "text-muted-foreground"}`}
-              onClick={() => setLiked(!liked)}
-            >
-              <ThumbsUp className={`h-5 w-5 ${liked ? "fill-current" : ""}`} />
-              <span className="text-[10px]">点赞</span>
-            </button>
-            <button
-              className={`flex flex-col items-center gap-0.5 ${starred ? "text-yellow-500" : "text-muted-foreground"}`}
-              onClick={() => setStarred(!starred)}
-            >
-              <Star className={`h-5 w-5 ${starred ? "fill-current" : ""}`} />
-              <span className="text-[10px]">收藏</span>
-            </button>
-            <button
-              className="flex flex-col items-center gap-0.5 text-muted-foreground"
-              onClick={() => setCommentOpen(true)}
-            >
-              <MessageCircle className="h-5 w-5" />
-              <span className="text-[10px]">评论</span>
-            </button>
-          </div>
+      {/* Fixed info section */}
+      <div className="shrink-0 px-4 pt-4 bg-background">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-2xl">{practiceDetail.avatar}</span>
+          <span className="text-sm font-medium">{practiceDetail.user}</span>
+          <span className={`ml-auto rounded-full px-2 py-0.5 text-[9px] font-medium ${tagColor[practiceDetail.tag]}`}>{practiceDetail.tag}</span>
         </div>
 
-        {/* Chat record */}
-        <div className="px-4 pb-4">
-          <h3 className="text-xs font-semibold mb-3">对练记录</h3>
-          <p className="text-center text-[10px] text-muted-foreground mb-3">角色由AI扮演，仅作练习参考</p>
-          <div className="space-y-3">
-            {practiceDetail.conversation.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-primary/10 text-foreground"
-                    : "bg-muted text-foreground"
-                }`}>
-                  {msg.text}
-                </div>
-              </div>
-            ))}
+        <Card className="mb-3 p-3">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="text-xs font-medium">{practiceDetail.role}</span>
+              <span className="ml-2 text-[10px] text-muted-foreground">AI角色</span>
+            </div>
+            <button
+              className="rounded-full bg-primary px-3 py-1 text-[11px] text-primary-foreground font-medium"
+              onClick={() => navigate(`/practice-detail/${practiceDetail.practiceId}`)}
+            >
+              去对练 &gt;
+            </button>
           </div>
+          <p className="text-[11px] text-muted-foreground line-clamp-2">{practiceDetail.roleDesc}</p>
+        </Card>
+
+        <Card className="mb-3 border-l-2 border-l-primary p-3">
+          <h4 className="text-xs font-semibold text-primary mb-1">📋 案例简介</h4>
+          <p className="text-[11px] text-muted-foreground">{practiceDetail.caseIntro}</p>
+        </Card>
+
+        {/* Like + collect + comment */}
+        <div className="flex items-center justify-around py-3 border-y border-border">
+          <button
+            className={`flex flex-col items-center gap-0.5 ${liked ? "text-destructive" : "text-muted-foreground"}`}
+            onClick={() => setLiked(!liked)}
+          >
+            <ThumbsUp className={`h-5 w-5 ${liked ? "fill-current" : ""}`} />
+            <span className="text-[10px]">点赞</span>
+          </button>
+          <button
+            className={`flex flex-col items-center gap-0.5 ${starred ? "text-yellow-500" : "text-muted-foreground"}`}
+            onClick={() => setStarred(!starred)}
+          >
+            <Star className={`h-5 w-5 ${starred ? "fill-current" : ""}`} />
+            <span className="text-[10px]">收藏</span>
+          </button>
+          <button
+            className="flex flex-col items-center gap-0.5 text-muted-foreground"
+            onClick={() => setCommentOpen(true)}
+          >
+            <MessageCircle className="h-5 w-5" />
+            <span className="text-[10px]">评论</span>
+          </button>
         </div>
       </div>
 
-      {/* TikTok-style half-screen comment panel */}
+      {/* Scrollable conversation only */}
+      <div className="flex-1 overflow-y-auto px-4 py-4">
+        <h3 className="text-xs font-semibold mb-3">对练记录</h3>
+        <p className="text-center text-[10px] text-muted-foreground mb-3">角色由AI扮演，仅作练习参考</p>
+        <div className="space-y-3">
+          {practiceDetail.conversation.map((msg, i) => (
+            <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                msg.role === "user"
+                  ? "bg-primary/10 text-foreground"
+                  : "bg-muted text-foreground"
+              }`}>
+                {msg.text}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Comment panel */}
       <AnimatePresence>
         {commentOpen && (
           <>
@@ -166,15 +166,12 @@ const SharedPracticeDetailPage = () => {
               className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-card rounded-t-2xl"
               style={{ height: "55vh" }}
             >
-              {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
                 <span className="text-sm font-semibold">{comments.length} 条评论</span>
                 <button onClick={() => setCommentOpen(false)}>
                   <X className="h-5 w-5 text-muted-foreground" />
                 </button>
               </div>
-
-              {/* Comment list */}
               <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
                 {comments.map((c) => (
                   <div key={c.id} className="flex gap-2.5">
@@ -194,8 +191,6 @@ const SharedPracticeDetailPage = () => {
                   </div>
                 ))}
               </div>
-
-              {/* Fixed input at bottom */}
               <div className="border-t border-border bg-card p-3 flex items-center gap-2 shrink-0">
                 <Input
                   value={commentInput}
