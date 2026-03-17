@@ -74,7 +74,7 @@ const PracticeCompletePage = () => {
         <Button
           className="flex-1 h-12 rounded-full text-sm font-medium bg-gradient-to-r from-primary to-primary/80"
           disabled={!reportReady}
-          onClick={() => navigate("/practice-review", { replace: true })}
+          onClick={() => navigate("/practice-review?detail=1", { replace: true })}
         >
           {reportReady ? (
             "查看报告"

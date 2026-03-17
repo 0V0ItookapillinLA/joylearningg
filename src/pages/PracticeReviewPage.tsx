@@ -360,23 +360,6 @@ const PracticeReviewPage = () => {
             </div>
           </Card>
 
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate("/practice")}
-              className="flex-1 rounded-xl bg-primary py-3 text-xs font-medium text-primary-foreground"
-            >
-              再练一次
-            </button>
-            <button
-              onClick={() => {
-                // Mock publish to public practice
-                alert("已发布到公开对练！");
-              }}
-              className="flex-1 rounded-xl border border-primary text-primary py-3 text-xs font-medium"
-            >
-              发布到公开对练
-            </button>
-          </div>
           <button
             onClick={() => setSelectedId(null)}
             className="w-full rounded-xl border border-border py-3 text-xs font-medium text-muted-foreground"
