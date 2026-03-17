@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Play, Library, Target, Brain, ChevronRight, Star, Users, Trophy } from "lucide-react";
+import { Search, Play, Library, Target, Brain, ChevronRight, Star, Users, Trophy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
