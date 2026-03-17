@@ -184,7 +184,7 @@ const PracticeReviewPage = () => {
 
             {/* Publish button */}
             <button
-              onClick={() => alert("已发布到公开对练！")}
+              onClick={() => setShowPublishDialog(true)}
               className="w-full rounded-xl border border-primary/30 bg-primary/5 py-2.5 text-xs font-medium text-primary"
             >
               📤 发布到公开对练
