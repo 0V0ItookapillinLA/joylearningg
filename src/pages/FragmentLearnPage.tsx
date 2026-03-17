@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Heart, MessageCircle, X, Send } from "lucide-react";
+import { ArrowLeft, Heart, MessageCircle, Bookmark, X, Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
