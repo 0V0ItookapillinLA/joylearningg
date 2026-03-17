@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Bell, Play, Library, Target, Brain, ChevronRight, Star, Users, Trophy } from "lucide-react";
+import { Search, Play, Library, Target, Brain, ChevronRight, Star, Users, Trophy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -66,18 +66,14 @@ const HomePage = () => {
   return (
     <div className="space-y-5 pb-4">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 pt-4">
-        <div className="relative flex-1">
+      <div className="px-4 pt-4">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             className="h-9 w-full rounded-full bg-muted pl-9 pr-4 text-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
             placeholder="搜索课程、知识点..."
           />
         </div>
-        <button className="relative text-muted-foreground">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-destructive" />
-        </button>
       </div>
 
       {/* Banner */}
