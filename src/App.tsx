@@ -27,6 +27,7 @@ import VideoPlayerPage from "@/pages/VideoPlayerPage";
 import DocViewerPage from "@/pages/DocViewerPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
 import MyContentPage from "@/pages/MyContentPage";
+import RoleDetailPage from "@/pages/RoleDetailPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
           <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
           <Route path="/plan/:id" element={<PlanDetailPage />} />
           <Route path="/my-content" element={<MyContentPage />} />
+          <Route path="/role-detail/:id" element={<RoleDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
