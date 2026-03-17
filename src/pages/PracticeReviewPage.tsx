@@ -2,6 +2,16 @@ import { ArrowLeft, ChevronDown, ChevronUp, AlertCircle, Lightbulb, CheckCircle2
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -126,6 +136,7 @@ const PracticeReviewPage = () => {
   const detailParam = searchParams.get("detail");
   const [selectedId, setSelectedId] = useState<number | null>(detailParam ? Number(detailParam) : null);
   const [expandedSegment, setExpandedSegment] = useState<number | null>(null);
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
   const selected = practiceList.find((p) => p.id === selectedId);
 
   const errorCount = dialogueSegments.filter(s => s.label === "error").length;
@@ -153,7 +164,7 @@ const PracticeReviewPage = () => {
                 <p className="text-[11px] text-muted-foreground mt-1">⏱ 时长 {selected.duration}</p>
               </div>
               <button
-                onClick={() => navigate("/practice")}
+                onClick={() => navigate(`/practice-detail/${selected.id}`)}
                 className="shrink-0 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm"
               >
                 🎯 再次练习
@@ -173,7 +184,7 @@ const PracticeReviewPage = () => {
 
             {/* Publish button */}
             <button
-              onClick={() => alert("已发布到公开对练！")}
+              onClick={() => setShowPublishDialog(true)}
               className="w-full rounded-xl border border-primary/30 bg-primary/5 py-2.5 text-xs font-medium text-primary"
             >
               📤 发布到公开对练
@@ -369,6 +380,30 @@ const PracticeReviewPage = () => {
             返回列表
           </button>
         </div>
+
+        {/* Publish confirmation dialog */}
+        <AlertDialog open={showPublishDialog} onOpenChange={setShowPublishDialog}>
+          <AlertDialogContent className="mx-auto max-w-[340px] rounded-2xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-sm">发布到公开对练</AlertDialogTitle>
+              <AlertDialogDescription className="text-xs">
+                确认将本次练习记录发布到公开对练广场？发布后所有用户均可查看您的练习内容和评分。
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex-row gap-2">
+              <AlertDialogCancel className="flex-1 mt-0 rounded-xl text-xs">取消</AlertDialogCancel>
+              <AlertDialogAction
+                className="flex-1 rounded-xl text-xs"
+                onClick={() => {
+                  setShowPublishDialog(false);
+                  navigate("/community");
+                }}
+              >
+                确认发布
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     );
   }

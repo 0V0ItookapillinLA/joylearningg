@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Heart, MessageCircle, X, Send } from "lucide-react";
+import { ArrowLeft, Heart, MessageCircle, Bookmark, X, Send } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -23,6 +23,7 @@ const FragmentLearnPage = () => {
   const navigate = useNavigate();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [liked, setLiked] = useState<number[]>([]);
+  const [bookmarked, setBookmarked] = useState<number[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState(mockComments);
@@ -86,6 +87,13 @@ const FragmentLearnPage = () => {
               >
                 <MessageCircle className="h-7 w-7 text-white" />
                 <span className="text-[10px] text-white">{v.comments}</span>
+              </button>
+              <button
+                onClick={() => setBookmarked(prev => prev.includes(v.id) ? prev.filter(id => id !== v.id) : [...prev, v.id])}
+                className="flex flex-col items-center gap-1"
+              >
+                <Bookmark className={`h-7 w-7 ${bookmarked.includes(v.id) ? "fill-yellow-400 text-yellow-400" : "text-white"}`} />
+                <span className="text-[10px] text-white">收藏</span>
               </button>
             </div>
 
