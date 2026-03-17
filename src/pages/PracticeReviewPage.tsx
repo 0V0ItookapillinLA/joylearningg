@@ -164,7 +164,7 @@ const PracticeReviewPage = () => {
                 <p className="text-[11px] text-muted-foreground mt-1">⏱ 时长 {selected.duration}</p>
               </div>
               <button
-                onClick={() => navigate("/practice")}
+                onClick={() => navigate(`/practice-detail/${selected.id}`)}
                 className="shrink-0 flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-primary/80 px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm"
               >
                 🎯 再次练习
