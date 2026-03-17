@@ -65,6 +65,7 @@ const App = () => (
           <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
           <Route path="/plan/:id" element={<PlanDetailPage />} />
           <Route path="/my-content" element={<MyContentPage />} />
+          <Route path="/role-detail/:id" element={<RoleDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
