@@ -122,7 +122,9 @@ const weaknesses = [
 
 const PracticeReviewPage = () => {
   const navigate = useNavigate();
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [searchParams] = useSearchParams();
+  const detailParam = searchParams.get("detail");
+  const [selectedId, setSelectedId] = useState<number | null>(detailParam ? Number(detailParam) : null);
   const [expandedSegment, setExpandedSegment] = useState<number | null>(null);
   const selected = practiceList.find((p) => p.id === selectedId);
 
