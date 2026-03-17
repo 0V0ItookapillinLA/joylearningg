@@ -26,6 +26,7 @@ import CourseDetailPage from "@/pages/CourseDetailPage";
 import VideoPlayerPage from "@/pages/VideoPlayerPage";
 import DocViewerPage from "@/pages/DocViewerPage";
 import KnowledgeBasePage from "@/pages/KnowledgeBasePage";
+import MyContentPage from "@/pages/MyContentPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
           <Route path="/comprehensive-eval" element={<ComprehensiveEvalPage />} />
           <Route path="/shared-practice/:id" element={<SharedPracticeDetailPage />} />
           <Route path="/plan/:id" element={<PlanDetailPage />} />
+          <Route path="/my-content" element={<MyContentPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
