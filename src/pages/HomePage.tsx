@@ -20,9 +20,9 @@ import practiceNegotiation from "@/assets/practice-negotiation.jpg";
 import practiceDemo from "@/assets/practice-demo.jpg";
 
 const banners = [
-  { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1 },
-  { id: 2, title: "客户服务金牌话术", subtitle: "30天打卡挑战赛", image: banner2 },
-  { id: 3, title: "新人入职必修课", subtitle: "系统化学习路径", image: banner3 },
+  { id: 1, title: "销售技巧提升训练营", subtitle: "AI实战陪练·限时免费", image: banner1, link: "/practice-detail/1" },
+  { id: 2, title: "客户服务金牌话术", subtitle: "30天打卡挑战赛", image: banner2, link: "/practice-detail/2" },
+  { id: 3, title: "新人入职必修课", subtitle: "系统化学习路径", image: banner3, link: "/practice-detail/3" },
 ];
 
 const quickActions = [
@@ -78,17 +78,37 @@ const HomePage = () => {
 
       {/* Banner */}
       <div className="relative mx-4 overflow-hidden rounded-2xl">
-        <motion.div key={bannerIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} className="relative h-36">
+        <motion.div 
+          key={bannerIdx} 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }} 
+          transition={{ duration: 0.4 }} 
+          className="relative h-36 cursor-pointer"
+          onClick={() => navigate(banners[bannerIdx].link)}
+          whileTap={{ scale: 0.98 }}
+        >
           <img src={banners[bannerIdx].image} alt={banners[bannerIdx].title} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/40 to-transparent" />
           <div className="absolute bottom-4 left-5">
             <h2 className="text-base font-bold text-white">{banners[bannerIdx].title}</h2>
             <p className="mt-0.5 text-[11px] text-white/80">{banners[bannerIdx].subtitle}</p>
           </div>
+          {/* 点击提示 */}
+          <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white/20 px-2 py-1 backdrop-blur-sm">
+            <span className="text-[10px] text-white">查看详情</span>
+            <ChevronRight className="h-3 w-3 text-white" />
+          </div>
         </motion.div>
         <div className="absolute bottom-2 right-3 flex gap-1.5">
           {banners.map((_, i) => (
-            <button key={i} onClick={() => setBannerIdx(i)} className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} />
+            <button 
+              key={i} 
+              onClick={(e) => {
+                e.stopPropagation();
+                setBannerIdx(i);
+              }} 
+              className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} 
+            />
           ))}
         </div>
       </div>
