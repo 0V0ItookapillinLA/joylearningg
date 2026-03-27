@@ -78,11 +78,11 @@ const HomePage = () => {
 
       {/* Banner */}
       <div className="relative mx-4 overflow-hidden rounded-2xl">
-        <motion.div 
-          key={bannerIdx} 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          transition={{ duration: 0.4 }} 
+        <motion.div
+          key={bannerIdx}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
           className="relative h-36 cursor-pointer"
           onClick={() => navigate(banners[bannerIdx].link)}
           whileTap={{ scale: 0.98 }}
@@ -93,24 +93,25 @@ const HomePage = () => {
             <h2 className="text-base font-bold text-white">{banners[bannerIdx].title}</h2>
             <p className="mt-0.5 text-[11px] text-white/80">{banners[bannerIdx].subtitle}</p>
           </div>
-          {/* 点击提示 */}
-          <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white/20 px-2 py-1 backdrop-blur-sm">
+          {/* 查看详情提示 */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 rounded-full bg-white/20 px-2 py-1 backdrop-blur-sm">
             <span className="text-[10px] text-white">查看详情</span>
             <ChevronRight className="h-3 w-3 text-white" />
           </div>
+          {/* 指示器 */}
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {banners.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setBannerIdx(i);
+                }}
+                className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`}
+              />
+            ))}
+          </div>
         </motion.div>
-        <div className="absolute bottom-2 right-3 flex gap-1.5">
-          {banners.map((_, i) => (
-            <button 
-              key={i} 
-              onClick={(e) => {
-                e.stopPropagation();
-                setBannerIdx(i);
-              }} 
-              className={`h-1.5 rounded-full transition-all ${i === bannerIdx ? "w-4 bg-white" : "w-1.5 bg-white/50"}`} 
-            />
-          ))}
-        </div>
       </div>
 
       {/* Fragment Learning Entry */}
