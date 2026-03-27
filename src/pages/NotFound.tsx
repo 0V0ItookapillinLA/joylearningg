@@ -1,20 +1,26 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
-
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
+    <div style={{
+      display: 'flex',
+      minHeight: '100vh',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#f3f4f6',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: '72px', fontWeight: 'bold', margin: '0 0 20px 0', color: '#1f2937' }}>404</h1>
+        <p style={{ fontSize: '20px', color: '#6b7280', marginBottom: '30px' }}>页面未找到</p>
+        <a href="/" style={{
+          display: 'inline-block',
+          padding: '10px 20px',
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '6px',
+          fontSize: '16px'
+        }}>
+          返回首页
         </a>
       </div>
     </div>
